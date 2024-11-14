@@ -1,3 +1,5 @@
+**DOKUMENTASI**
+
 ---
 
 ## Instruksi Instalasi dan Menjalankan Aplikasi
@@ -20,7 +22,7 @@
    Buat file `.env` di root proyek berdasarkan contoh yang disediakan di `.env.example`. Masukkan variabel backend URL Anda sebagai berikut:
 
    ```
-   BACKEND_URI=<URL-backend-Anda>
+   BACKEND_URI=[URL-backend-Anda]
    ```
 
 4. **Install Dependencies**
@@ -63,7 +65,7 @@ Aplikasi **Car Management** memungkinkan pengguna untuk mengelola data mobil den
   - **components**: Menyimpan komponen-komponen UI, yang dibagi berdasarkan struktur **Atomic Design**:
     - **elements**: Komponen terkecil (misalnya tombol, input) yang digunakan di seluruh aplikasi.
     - **fragments**: Komponen yang terdiri dari beberapa elemen, seperti form atau daftar item.
-    - **layouts**: Komponen untuk tata letak utama halaman, termasuk header, sidebar, atau footer.
+    - **layouts**: Komponen untuk tata letak utama halaman, seperti halaman otentikasi, yang digunakan untuk membungkus halaman dengan elemen umum (misalnya, header, sidebar, tombol toggle tema).
   - **contexts**: Tempat penyimpanan konteks (state global) untuk data yang dapat diakses di seluruh aplikasi.
   - **hooks**: Custom hooks yang digunakan untuk logika umum yang dapat digunakan ulang di berbagai komponen.
   - **pages**: Folder ini menyimpan halaman utama aplikasi. Dibagi menjadi:
@@ -98,3 +100,11 @@ export default App;
 > **Legacy Note**: Komponen `App` ini menjadi entry point utama yang merender elemen root dari aplikasi **Car Management**. Struktur dan styling dapat disesuaikan untuk menampilkan navigasi, halaman, dan komponen tambahan sesuai kebutuhan aplikasi.
 
 Komponen ini menampilkan judul aplikasi **Car Management** sebagai elemen utama halaman dengan style kelas yang dapat disesuaikan dengan TailwindCSS.
+
+---
+
+## Legacy Penggunaan Custom Hooks
+
+> **Legacy Note**: Custom hooks dalam aplikasi ini harus diawali dengan kata `use`, seperti `useLogin`, `useFetchData`, atau `useAuth`. Penamaan ini mengikuti konvensi React untuk hooks dan memastikan bahwa kode lebih mudah dipahami serta konsisten dengan pola hooks pada umumnya.
+
+Custom hooks ini dapat dibuat di dalam folder `hooks` dan digunakan untuk menangani logika yang dapat dipakai kembali di berbagai komponen.
