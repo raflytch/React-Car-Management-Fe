@@ -66,6 +66,7 @@ export default [
       "react/no-danger": "off",
       "react/no-danger-with-children": "off",
       "no-unused-vars": "off",
+      "react/display-name": "off",
     },
   },
 ];
