@@ -1,7 +1,3 @@
-**DOKUMENTASI**
-
----
-
 ## Instruksi Instalasi dan Menjalankan Aplikasi
 
 1. **Clone Repository**
@@ -63,9 +59,8 @@ Aplikasi **Car Management** memungkinkan pengguna untuk mengelola data mobil den
 - **src**: Direktori utama berisi kode sumber aplikasi.
   - **assets**: Folder ini digunakan untuk menyimpan gambar, ikon, dan berkas statis lain yang digunakan di seluruh aplikasi.
   - **components**: Menyimpan komponen-komponen UI, yang dibagi berdasarkan struktur **Atomic Design**:
-    - **elements**: Komponen terkecil (misalnya tombol, input) yang digunakan di seluruh aplikasi.
-    - **fragments**: Komponen yang terdiri dari beberapa elemen, seperti form atau daftar item.
-    - **layouts**: Komponen untuk tata letak utama halaman, seperti halaman otentikasi, yang digunakan untuk membungkus halaman dengan elemen umum (misalnya, header, sidebar, tombol toggle tema).
+    - **elements**: Komponen UI terkecil (misalnya tombol, input, dan link) yang digunakan di seluruh aplikasi.
+    - **fragments**: Komponen yang terdiri dari beberapa elemen, seperti form atau kumpulan elemen yang lebih kompleks yang dibentuk menjadi bagian yang dapat digunakan kembali.
   - **contexts**: Tempat penyimpanan konteks (state global) untuk data yang dapat diakses di seluruh aplikasi.
   - **hooks**: Custom hooks yang digunakan untuk logika umum yang dapat digunakan ulang di berbagai komponen.
   - **pages**: Folder ini menyimpan halaman utama aplikasi. Dibagi menjadi:
@@ -86,11 +81,9 @@ import React from "react";
 // Komponen utama aplikasi Car Management
 const App = () => {
   return (
-    <>
-      <div>
-        <h1 className="text-3xl font-bold underline">Car Management</h1>
-      </div>
-    </>
+    <div>
+      <h1 className="text-3xl font-bold underline">Car Management</h1>
+    </div>
   );
 };
 
@@ -108,3 +101,5 @@ Komponen ini menampilkan judul aplikasi **Car Management** sebagai elemen utama 
 > **Legacy Note**: Custom hooks dalam aplikasi ini harus diawali dengan kata `use`, seperti `useLogin`, `useFetchData`, atau `useAuth`. Penamaan ini mengikuti konvensi React untuk hooks dan memastikan bahwa kode lebih mudah dipahami serta konsisten dengan pola hooks pada umumnya.
 
 Custom hooks ini dapat dibuat di dalam folder `hooks` dan digunakan untuk menangani logika yang dapat dipakai kembali di berbagai komponen.
+
+---
