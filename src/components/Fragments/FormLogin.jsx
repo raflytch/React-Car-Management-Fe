@@ -3,7 +3,7 @@ import InputForm from "../Elements/Input/InputForm";
 import Button from "../Elements/Buttons/Button";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import Login from "../../services/auth.service";
+import { Login } from "../../services/auth.service";
 
 const FormLogin = () => {
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ const FormLogin = () => {
             type="email"
             id="email"
             name="email"
-            placeholder="Email"
+            placeholder="wahyuimut@gmail.com"
             ref={inputRef}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
