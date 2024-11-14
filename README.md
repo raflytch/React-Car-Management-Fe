@@ -22,7 +22,7 @@
    Buat file `.env` di root proyek berdasarkan contoh yang disediakan di `.env.example`. Masukkan variabel backend URL Anda sebagai berikut:
 
    ```
-   BACKEND_URI=[URL-backend-Anda]
+   VITE_BACKEND_URI=[URL-backend-Anda]
    ```
 
 4. **Install Dependencies**
