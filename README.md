@@ -1,7 +1,55 @@
 ---
+
+## Instruksi Instalasi dan Menjalankan Aplikasi
+
+1. **Clone Repository**
+   Clone repository aplikasi ini dari GitHub dengan perintah berikut:
+
+   ```bash
+   git clone https://github.com/raflytch/React-Car-Management-Fe
+   ```
+
+2. **Masuk ke Direktori**
+   Pindah ke direktori proyek yang baru saja di-clone:
+
+   ```bash
+   cd React-Car-Management-Fe
+   ```
+
+3. **Setup Environment Variables**
+   Buat file `.env` di root proyek berdasarkan contoh yang disediakan di `.env.example`. Masukkan variabel backend URL Anda sebagai berikut:
+
+   ```
+   BACKEND_URI=<URL-backend-Anda>
+   ```
+
+4. **Install Dependencies**
+   Install dependensi yang diperlukan oleh aplikasi dengan menggunakan **npm** atau **yarn**:
+
+   ```bash
+   npm install
+   # atau jika menggunakan yarn
+   yarn install
+   ```
+
+5. **Menjalankan Aplikasi**
+   Jalankan aplikasi menggunakan Vite:
+
+   ```bash
+   npm run dev
+   # atau jika menggunakan yarn
+   yarn dev
+   ```
+
+6. **Akses Aplikasi**
+   Setelah berhasil dijalankan, buka aplikasi di browser dengan mengunjungi [http://localhost:5173](http://localhost:5173) atau URL yang diberikan oleh Vite.
+
+---
+
 ## Deskripsi Aplikasi
 
 Aplikasi **Car Management** memungkinkan pengguna untuk mengelola data mobil dengan fitur yang mencakup penambahan, pengeditan, dan penghapusan data mobil. Aplikasi ini dibangun dengan React, dan mengikuti struktur **Atomic Design** untuk komponen, serta memanfaatkan konteks, hooks, dan layanan API untuk pengelolaan data.
+
 ---
 
 ## Struktur Folder
