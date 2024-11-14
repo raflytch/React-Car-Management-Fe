@@ -84,7 +84,7 @@ Aplikasi **Car Management** memungkinkan pengguna untuk mengelola data mobil den
 import React from "react";
 
 // Komponen utama aplikasi Car Management
-function App() {
+const App = () => {
   return (
     <>
       <div>
@@ -92,7 +92,7 @@ function App() {
       </div>
     </>
   );
-}
+};
 
 export default App;
 ```
