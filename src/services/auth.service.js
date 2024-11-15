@@ -1,11 +1,8 @@
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 const Login = async (data, callback) => {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URI}/auth/login`,
-      data
-    );
+    const response = await axiosInstance.post("/auth/login", data);
     const userData = response.data.data;
     callback("Success", userData);
   } catch (err) {
@@ -16,10 +13,7 @@ const Login = async (data, callback) => {
 
 const Register = async (data, callback) => {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URI}/auth/register`,
-      data
-    );
+    const response = await axiosInstance.post("/auth/register", data);
     callback("Success", response.data.data.token);
   } catch (error) {
     const errorMessage = error.response?.data?.message || "An error occurred";
