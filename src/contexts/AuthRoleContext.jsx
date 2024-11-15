@@ -34,7 +34,12 @@ export const AuthRoleProvider = ({ children }) => {
     Cookies.set("token", token);
     dispatch({ type: "LOGIN_SUCCESS", payload: { user, token } });
 
-    if (user.role === "Superadmin" || user.role === "Admin") {
+    if (
+      user.role === "Superadmin" ||
+      user.role === "Admin" ||
+      user.role === "admin" ||
+      user.role === "superadmin"
+    ) {
       navigate("/dashboard");
     } else {
       navigate("/");
