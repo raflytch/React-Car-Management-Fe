@@ -19,7 +19,12 @@ const useProtected = () => {
         } else {
           const role = decodedToken.role;
 
-          if (role === "Superadmin" || role === "Admin") {
+          if (
+            role === "Superadmin" ||
+            role === "Admin" ||
+            role === "admin" ||
+            role === "superadmin"
+          ) {
             if (location.pathname === "/login" || location.pathname === "/") {
               navigate("/dashboard");
             }
