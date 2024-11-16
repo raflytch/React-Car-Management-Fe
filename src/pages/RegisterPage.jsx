@@ -2,11 +2,11 @@ import React from "react";
 import FormRegister from "../components/Fragments/FormRegister";
 import { Link } from "react-router-dom";
 import DynamicBanner from "../components/Elements/Banners/DynamicBanner";
-import CarRegisterBanner from "../assets/images/car-rent-register-banner.jpg";
+import CarRegisterBanner from "../assets/images/car-banner-login.jpg";
 
 const RegisterPage = () => {
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen">
+    <div className="flex flex-col lg:flex-row w-full h-full">
       {/* Form Section */}
       <div className="flex flex-1 items-center justify-center py-12 px-6 sm:px-12 bg-white">
         <div className="w-full max-w-md space-y-8">
