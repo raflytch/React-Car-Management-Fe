@@ -14,6 +14,7 @@ const initialState = {
 export const AuthReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN_SUCCESS":
+    case "INITIALIZE":
       return {
         ...state,
         user: action.payload.user,
@@ -22,13 +23,6 @@ export const AuthReducer = (state, action) => {
       };
     case "LOGOUT":
       return initialState;
-    case "INITIALIZE":
-      return {
-        ...state,
-        user: action.payload.user,
-        token: action.payload.token,
-        isAuthenticated: true,
-      };
     default:
       return state;
   }
@@ -59,13 +53,6 @@ export const AuthRoleProvider = ({ children }) => {
             type: "INITIALIZE",
             payload: { user, token },
           });
-
-          if (
-            decodedToken.role?.toLowerCase() === "admin" ||
-            decodedToken.role?.toLowerCase() === "superadmin"
-          ) {
-            navigate("/dashboard");
-          }
         } catch (error) {
           console.error("Token initialization error:", error);
           Cookies.remove("token");
@@ -74,7 +61,7 @@ export const AuthRoleProvider = ({ children }) => {
     };
 
     initializeAuth();
-  }, [navigate]);
+  }, []);
 
   const login = (user, token) => {
     Cookies.set("token", token);

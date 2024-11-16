@@ -15,7 +15,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="/dashboard/update-car/:id" element={<UpdateCar />} />
+            <Route path="update-car/:id" element={<UpdateCar />} />
           </Route>
         </Routes>
       </AuthRoleProvider>

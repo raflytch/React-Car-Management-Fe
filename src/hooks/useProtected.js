@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthRole } from "../contexts/AuthRoleContext";
 
-const useProtected = () => {
+const useProtected = (allowedRoles = ["admin", "superadmin"]) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, login } = useAuthRole();
@@ -12,50 +12,46 @@ const useProtected = () => {
 
   useEffect(() => {
     const validateToken = () => {
-      if (token) {
-        try {
-          const decodedToken = jwtDecode(token);
+      if (!token) {
+        navigate("/login", { state: { from: location } });
+        return;
+      }
 
-          if (decodedToken.exp * 1000 < Date.now()) {
-            Cookies.remove("token");
-            navigate("/login", { state: { from: location } });
-            return;
-          }
+      try {
+        const decodedToken = jwtDecode(token);
 
-          if (!isAuthenticated) {
-            const user = {
-              firstName: decodedToken.firstName,
-              role: decodedToken.role,
-            };
-            login(user, token);
-          }
-
-          const role = decodedToken.role?.toLowerCase();
-          const isAdmin = role === "admin" || role === "superadmin";
-
-          if (isAdmin) {
-            if (location.pathname === "/login" || location.pathname === "/") {
-              navigate("/dashboard");
-            }
-          } else {
-            if (location.pathname === "/dashboard") {
-              navigate("/");
-            }
-          }
-        } catch (error) {
-          console.error("Token validation error:", error);
+        if (decodedToken.exp * 1000 < Date.now()) {
           Cookies.remove("token");
           navigate("/login", { state: { from: location } });
+          return;
         }
-      } else if (location.pathname !== "/login") {
+
+        const userRole = decodedToken.role?.toLowerCase();
+
+        if (!allowedRoles.includes(userRole)) {
+          navigate("/");
+          return;
+        }
+
+        if (!isAuthenticated) {
+          const user = {
+            firstName: decodedToken.firstName,
+            role: decodedToken.role,
+          };
+          login(user, token);
+        }
+      } catch (error) {
+        console.error("Token validation error:", error);
+        Cookies.remove("token");
         navigate("/login", { state: { from: location } });
       }
     };
 
     validateToken();
-  }, [location, navigate, token, isAuthenticated, login]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, location.pathname]);
 
-  return token;
+  return { isAuthenticated };
 };
 
 export default useProtected;
