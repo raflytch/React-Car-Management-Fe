@@ -8,7 +8,7 @@ const DynamicBanner = ({ imageSrc, title, description }) => {
         src={imageSrc}
         className="absolute inset-0 h-full w-full object-cover aspect-auto"
       />
-      <div className="relative flex flex-col justify-start p-8 text-gray-800 bg-gradient-to-t from-black/50 via-transparent">
+      <div className="relative flex flex-col justify-start p-8 text-gray-800 from-black/50 via-transparent">
         <h2 className="font-bold text-red-600 text-4xl lg:text-xl">{title}</h2>
         <p className="mt-4 text-sm leading-relaxed text-teal-600">
           {description}
