@@ -5,6 +5,7 @@ import HomePage from "./pages/Users/HomePage";
 import Dashboard from "./pages/Superadmin/Dashboard";
 import { AuthRoleProvider } from "./contexts/AuthRoleContext";
 import UpdateCar from "./pages/Superadmin/UpdateCar";
+import CarDatasUser from "./pages/Users/CarDatasUser";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="/dashboard/update-car/:id" element={<UpdateCar />} />
           </Route>
+          <Route path="/Car" element={<CarDatasUser/>} />
         </Routes>
       </AuthRoleProvider>
     </Router>
@@ -24,3 +26,4 @@ function App() {
 }
 
 export default App;
+
