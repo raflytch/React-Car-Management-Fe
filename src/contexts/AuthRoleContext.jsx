@@ -1,6 +1,7 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const AuthRoleContext = createContext();
 
@@ -21,6 +22,13 @@ export const AuthReducer = (state, action) => {
       };
     case "LOGOUT":
       return initialState;
+    case "INITIALIZE":
+      return {
+        ...state,
+        user: action.payload.user,
+        token: action.payload.token,
+        isAuthenticated: true,
+      };
     default:
       return state;
   }
@@ -30,15 +38,51 @@ export const AuthRoleProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const initializeAuth = () => {
+      const token = Cookies.get("token");
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token);
+
+          if (decodedToken.exp * 1000 < Date.now()) {
+            Cookies.remove("token");
+            return;
+          }
+
+          const user = {
+            email: decodedToken.email,
+            role: decodedToken.role,
+          };
+
+          dispatch({
+            type: "INITIALIZE",
+            payload: { user, token },
+          });
+
+          if (
+            decodedToken.role?.toLowerCase() === "admin" ||
+            decodedToken.role?.toLowerCase() === "superadmin"
+          ) {
+            navigate("/dashboard");
+          }
+        } catch (error) {
+          console.error("Token initialization error:", error);
+          Cookies.remove("token");
+        }
+      }
+    };
+
+    initializeAuth();
+  }, [navigate]);
+
   const login = (user, token) => {
     Cookies.set("token", token);
     dispatch({ type: "LOGIN_SUCCESS", payload: { user, token } });
 
     if (
-      user.role === "Superadmin" ||
-      user.role === "Admin" ||
-      user.role === "admin" ||
-      user.role === "superadmin"
+      user.role?.toLowerCase() === "admin" ||
+      user.role?.toLowerCase() === "superadmin"
     ) {
       navigate("/dashboard");
     } else {
@@ -59,5 +103,4 @@ export const AuthRoleProvider = ({ children }) => {
   );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuthRole = () => useContext(AuthRoleContext);
