@@ -14,7 +14,9 @@ const Login = async (data, callback) => {
 const Register = async (data, callback) => {
   try {
     const response = await axiosInstance.post("/auth/register", data);
-    callback("Success", response.data.data.token);
+    const userData = response.data.data;
+    console.log(userData);
+    callback("Success", userData);
   } catch (error) {
     const errorMessage = error.response?.data?.message || "An error occurred";
     callback("Error", errorMessage);
