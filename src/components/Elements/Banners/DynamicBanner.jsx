@@ -2,7 +2,7 @@ import React from "react";
 
 const DynamicBanner = ({ imageSrc, title, description }) => {
   return (
-    <section className="relative hidden h-screen w-fit lg:flex">
+    <section className="relative hidden h-screen w-1/2 bg-gray-950 lg:flex">
       <img
         alt="Banner"
         src={imageSrc}
