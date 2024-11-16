@@ -5,7 +5,7 @@ const Button = ({
   color = "indigo",
   width = "full",
 }) => {
-  const baseStyles = `inline-block rounded px-12 py-3 text-sm font-medium focus:outline-none focus:ring`;
+  const baseStyles = `inline-block rounded px-12 py-3 text-sm font-medium focus:outline-none focus:ring transition ease-in-out duration-300`;
   const colorStyles = {
     indigo: `border border-indigo-600 bg-indigo-600 text-white hover:bg-transparent hover:text-indigo-600 active:text-indigo-500`,
     red: `border border-red-600 bg-red-600 text-white hover:bg-transparent hover:text-red-600 active:text-red-500`,

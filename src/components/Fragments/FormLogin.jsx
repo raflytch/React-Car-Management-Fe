@@ -48,7 +48,12 @@ const FormLogin = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="submit" color="red" width="full">
+            <Button
+              className="transition ease-in-out duration-300 transform hover:scale-105"
+              type="submit"
+              color="red"
+              width="full"
+            >
               Login
             </Button>
           </form>
