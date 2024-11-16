@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../Elements/Buttons/Button";
 import InputForm from "../Elements/Input/InputForm";
-import { useNavigate } from "react-router-dom";
 import useRegister from "../../hooks/useRegister";
 import Loading from "../Elements/Loading/Loading";
 
 const FormRegister = () => {
-  const navigate = useNavigate();
   const { register, loading } = useRegister();
 
   const [formData, setFormData] = useState({
