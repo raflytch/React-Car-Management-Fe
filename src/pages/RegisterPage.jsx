@@ -1,14 +1,12 @@
 import React from "react";
 import FormRegister from "../components/Fragments/FormRegister";
 import { Link } from "react-router-dom";
-import LoginBanner from "../components/Elements/Banners/LoginBanner";
+import DynamicBanner from "../components/Elements/Banners/DynamicBanner";
+import CarRegisterBanner from "../assets/images/car-rent-register-banner.jpg";
 
 const RegisterPage = () => {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
-      {/* Banner Section */}
-      <LoginBanner />
-
       {/* Form Section */}
       <div className="flex flex-1 items-center justify-center py-12 px-6 sm:px-12 bg-white">
         <div className="w-full max-w-md space-y-8">
@@ -30,6 +28,12 @@ const RegisterPage = () => {
           </p>
         </div>
       </div>
+      {/* Banner Section */}
+      <DynamicBanner
+        imageSrc={CarRegisterBanner}
+        title="Join the Journey"
+        description="Start your adventure today! Reliable, easy, and affordable car rentals."
+      />
     </div>
   );
 };

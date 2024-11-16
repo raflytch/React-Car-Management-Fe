@@ -1,11 +1,17 @@
-import LoginBanner from "../components/Elements/Banners/LoginBanner";
+import React from "react";
 import FormLogin from "../components/Fragments/FormLogin";
 import { Link } from "react-router-dom";
+import DynamicBanner from "../components/Elements/Banners/DynamicBanner";
+import CarLoginBanner from "../assets/images/car-banner-login.jpg";
 
 const LoginPage = () => {
   return (
     <div className="flex min-h-screen flex-row lg:flex-row">
-      <LoginBanner />
+      <DynamicBanner
+        imageSrc={CarLoginBanner}
+        title="Explore the Roads with Ease"
+        description="Drive your dream car today! Affordable, flexible, and comfortable."
+      />
 
       <div className="flex w-full lg:w-1/2 flex-col justify-center p-4 lg:p-8">
         <div className="mx-auto w-full max-w-md">
