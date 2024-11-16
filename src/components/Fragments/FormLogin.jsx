@@ -26,7 +26,7 @@ const FormLogin = () => {
   return (
     <>
       <div className="flex justify-center items-center px-4 py-6">
-        <div className="w-full sm:w-96 bg-white p-6 rounded-lg shadow-md">
+        <div className="w-full sm:w-full bg-white p-4 rounded-lg">
           {loading && <Loading />}
           <form onSubmit={handleLogin}>
             <InputForm
@@ -48,7 +48,9 @@ const FormLogin = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="submit">Login</Button>
+            <Button type="submit" color="red" width="full">
+              Login
+            </Button>
           </form>
         </div>
       </div>

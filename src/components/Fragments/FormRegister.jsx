@@ -86,7 +86,9 @@ const FormRegister = () => {
             name="password"
             placeholder="Password"
           />
-          <Button type="submit">Login</Button>
+          <Button type="submit" color="red">
+            Login
+          </Button>
         </form>
       </div>
     </>
