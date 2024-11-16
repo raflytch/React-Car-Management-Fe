@@ -22,7 +22,7 @@ const FormRegister = () => {
   const handleChange = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
-    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    setFormData((prevFormDatas) => ({ ...prevFormDatas, [name]: value }));
   };
 
   const handleSubmit = (event) => {
