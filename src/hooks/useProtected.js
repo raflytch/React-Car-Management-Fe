@@ -2,29 +2,38 @@ import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuthRole } from "../contexts/AuthRoleContext";
 
 const useProtected = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, login } = useAuthRole();
   const token = Cookies.get("token");
 
   useEffect(() => {
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
+    const validateToken = () => {
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token);
 
-        if (decodedToken.exp * 1000 < Date.now()) {
-          Cookies.remove("token");
-          navigate("/login", { state: { from: location } });
-        } else {
-          const role = decodedToken.role;
+          if (decodedToken.exp * 1000 < Date.now()) {
+            Cookies.remove("token");
+            navigate("/login", { state: { from: location } });
+            return;
+          }
 
-          if (
-            role === "Superadmin" ||
-            role === "Admin" ||
-            role === "admin" ||
-            role === "superadmin"
-          ) {
+          if (!isAuthenticated) {
+            const user = {
+              firstName: decodedToken.firstName,
+              role: decodedToken.role,
+            };
+            login(user, token);
+          }
+
+          const role = decodedToken.role?.toLowerCase();
+          const isAdmin = role === "admin" || role === "superadmin";
+
+          if (isAdmin) {
             if (location.pathname === "/login" || location.pathname === "/") {
               navigate("/dashboard");
             }
@@ -33,15 +42,18 @@ const useProtected = () => {
               navigate("/");
             }
           }
+        } catch (error) {
+          console.error("Token validation error:", error);
+          Cookies.remove("token");
+          navigate("/login", { state: { from: location } });
         }
-      } catch (error) {
-        Cookies.remove("token");
+      } else if (location.pathname !== "/login") {
         navigate("/login", { state: { from: location } });
       }
-    } else if (location.pathname !== "/login") {
-      navigate("/login", { state: { from: location } });
-    }
-  }, [location, navigate, token]);
+    };
+
+    validateToken();
+  }, [location, navigate, token, isAuthenticated, login]);
 
   return token;
 };
