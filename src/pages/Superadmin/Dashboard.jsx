@@ -15,15 +15,12 @@ const Dashboard = () => {
   return (
     <ProtectedRoute>
       <div className="flex">
-        {/* Sidebar */}
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-        {/* Main Content */}
         <main className="flex-1 ml-0 lg:ml-64 p-6 bg-gray-100 min-h-screen transition-all">
-          {/* Hamburger Menu */}
           <button
             onClick={toggleSidebar}
-            className="fixed top-4 left-4 z-50 bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all"
+            className="fixed top-4 left-4 z-50 bg-white text-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl transition-all lg:hidden"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
