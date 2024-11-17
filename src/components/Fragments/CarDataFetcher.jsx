@@ -3,8 +3,11 @@ import axiosInstance from "../../api/axiosInstance";
 import Button from "../Elements/Buttons/Button";
 import Loading from "../Elements/Loading/Loading";
 import Navbar from "./Navbar";
+import useProtectedAll from "../../hooks/useProtectedAll";
+import Footer from "./Footer";
 
 const CarDataFetcher = () => {
+  useProtectedAll(["member"]);
   const [carName, setCarName] = useState("");
   const [carPrice, setCarPrice] = useState("");
   const [carData, setCarData] = useState([]);
@@ -134,6 +137,7 @@ const CarDataFetcher = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };
