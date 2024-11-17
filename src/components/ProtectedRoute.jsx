@@ -11,7 +11,6 @@ const ProtectedRoute = ({
   const { isAuthenticated, isLoading } = useAuthRole();
   const token = Cookies.get("token");
 
-  // Tampilkan loading state selama proses autentikasi
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">

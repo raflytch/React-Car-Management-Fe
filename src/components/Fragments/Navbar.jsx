@@ -40,7 +40,7 @@ const Navbar = () => {
               Projects
             </Link>
             <Link
-              to="/blog"
+              to="/car"
               className="text-gray-500 transition hover:text-gray-700"
             >
               Blog
