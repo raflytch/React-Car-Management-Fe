@@ -22,13 +22,11 @@ const Button = ({
     lg: "w-48",
   };
 
-  const responsiveStyles = `sm:inline-block sm:w-auto`;
-
   return (
     <button
       type={type || "button"}
       onClick={onAction}
-      className={`${baseStyles} ${colorStyles[color]} ${widthStyles[width]} ${responsiveStyles}`}
+      className={`${baseStyles} ${colorStyles[color]} ${widthStyles[width]}`}
     >
       {children}
     </button>
