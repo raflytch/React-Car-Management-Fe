@@ -48,11 +48,7 @@ const FormLogin = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button
-              type="submit"
-              color="red"
-              width="full"
-            >
+            <Button type="submit" color="red" width="full">
               Login
             </Button>
           </form>

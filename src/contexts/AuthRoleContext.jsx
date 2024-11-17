@@ -1,4 +1,10 @@
-import { createContext, useContext, useReducer, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -30,10 +36,12 @@ export const AuthReducer = (state, action) => {
 
 export const AuthRoleProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const initializeAuth = () => {
+      setIsLoading(true);
       const token = Cookies.get("token");
       if (token) {
         try {
@@ -41,6 +49,7 @@ export const AuthRoleProvider = ({ children }) => {
 
           if (decodedToken.exp * 1000 < Date.now()) {
             Cookies.remove("token");
+            setIsLoading(false);
             return;
           }
 
@@ -58,6 +67,7 @@ export const AuthRoleProvider = ({ children }) => {
           Cookies.remove("token");
         }
       }
+      setIsLoading(false);
     };
 
     initializeAuth();
@@ -83,8 +93,16 @@ export const AuthRoleProvider = ({ children }) => {
     navigate("/login");
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <AuthRoleContext.Provider value={{ ...state, login, logout }}>
+    <AuthRoleContext.Provider value={{ ...state, login, logout, isLoading }}>
       {children}
     </AuthRoleContext.Provider>
   );
