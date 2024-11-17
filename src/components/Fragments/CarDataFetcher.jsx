@@ -5,20 +5,21 @@ import axiosInstance from "../../api/axiosInstance";
 
 const CarDataFetcher = () => {
   const [carName, setCarName] = useState("");
-  const [carPrice, setCarPrice] = useState("");  // Store raw price (without commas)
+  const [carPrice, setCarPrice] = useState("");
   const [carData, setCarData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);  // Error state
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCars = async () => {
       setLoading(true);
-      setError(null);  // Reset error before making the request
+      setError(null);
       try {
         const response = await axiosInstance.get("/cars");
-        console.log(response);  // Check the response structure
+        console.log("test")
+        console.log(response)
         if (response.data.isSuccess) {
-          setCarData(response.data.data.cars);  // Update carData with the correct response
+          setCarData(response.data.data.cars);
         } else {
           setError("Failed to fetch cars");
         }
@@ -35,13 +36,11 @@ const CarDataFetcher = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add search functionality if needed
   };
 
   const handlePriceChange = (e) => {
-    // Remove non-numeric characters (only digits)
     const rawValue = e.target.value.replace(/\D/g, "");
-    setCarPrice(rawValue);  // Set the raw price (without commas)
+    setCarPrice(rawValue);
   };
 
   return (
@@ -78,8 +77,8 @@ const CarDataFetcher = () => {
             <input
               type="text"
               id="carPrice"
-              value={carPrice}  // Display raw numeric value
-              onChange={handlePriceChange}  // Handle raw input (no commas)
+              value={carPrice}
+              onChange={handlePriceChange}
               placeholder="Enter price"
               className="mt-2 block w-full pl-10 px-5 py-3 text-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
