@@ -7,6 +7,7 @@ import { AuthRoleProvider } from "./contexts/AuthRoleContext";
 import UpdateCar from "./pages/Superadmin/UpdateCar";
 import NotFoundPage from "./pages/NotFoundPage";
 import UpdateUser from "./pages/general/UpdateUser";
+import UserList from "./pages/Superadmin/Users";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="update-car/:id" element={<UpdateCar />} />
             <Route path="update-user/:id" element={<UpdateUser/>} />
+            <Route path="users" element={<UserList />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
