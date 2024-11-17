@@ -43,7 +43,7 @@ const Navbar = () => {
               to="/car"
               className="text-gray-500 transition hover:text-gray-700"
             >
-              Blog
+              Products
             </Link>
           </nav>
 
@@ -120,11 +120,11 @@ const Navbar = () => {
             Projects
           </Link>
           <Link
-            to="/blog"
+            to="/car"
             className="block text-gray-700 hover:text-gray-900 w-full"
             onClick={() => setIsMenuOpen(false)}
           >
-            Blog
+            Product
           </Link>
         </nav>
 

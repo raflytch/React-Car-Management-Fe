@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import axiosInstance from "../../api/axiosInstance";
 import Button from "../Elements/Buttons/Button";
 import Loading from "../Elements/Loading/Loading";
-import axiosInstance from "../../api/axiosInstance";
+import Navbar from "./Navbar";
 
 const CarDataFetcher = () => {
   const [carName, setCarName] = useState("");
@@ -15,17 +16,16 @@ const CarDataFetcher = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axiosInstance.get("/cars");
-        console.log("test")
-        console.log(response)
+        const response = await axiosInstance.get(`/cars`);
+        console.log("Response Data:", response.data);
         if (response.data.isSuccess) {
           setCarData(response.data.data.cars);
         } else {
-          setError("Failed to fetch cars");
+          setError(response.data.message || "Failed to fetch cars");
         }
       } catch (err) {
-        console.error("Error fetching cars:", err);
-        setError(err.response?.data?.message || "An error occurred");
+        console.error("Axios Error:", err);
+        setError(err.response?.data?.message || "An unexpected error occurred");
       } finally {
         setLoading(false);
       }
@@ -36,6 +36,8 @@ const CarDataFetcher = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Submitted Car Name:", carName);
+    console.log("Submitted Car Price:", carPrice);
   };
 
   const handlePriceChange = (e) => {
@@ -44,9 +46,13 @@ const CarDataFetcher = () => {
   };
 
   return (
-    <>
+    <div className="p-6">
+      <div className="mb-6">
+        <Navbar />
+      </div>
+      {/* Form */}
       <form
-        className="flex flex-col md:flex-row items-end justify-center gap-6 p-6"
+        className="flex flex-col md:flex-row items-end justify-center gap-6"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col md:flex-row items-center gap-6 w-full md:w-auto">
@@ -63,9 +69,10 @@ const CarDataFetcher = () => {
               value={carName}
               onChange={(e) => setCarName(e.target.value)}
               placeholder="Enter car name"
-              className="mt-2 block w-full px-5 py-3 text-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-2 block w-full px-5 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
           <div className="w-full md:w-40 relative">
             <label
               htmlFor="carPrice"
@@ -80,33 +87,41 @@ const CarDataFetcher = () => {
               value={carPrice}
               onChange={handlePriceChange}
               placeholder="Enter price"
-              className="mt-2 block w-full pl-10 px-5 py-3 text-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-2 block w-full pl-10 px-5 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
         <Button type="submit" color="red" width="auto">
-          {loading ? "Loading..." : "Search"}
+          Search
         </Button>
       </form>
 
       <div className="py-6">
         {loading ? (
           <Loading />
+        ) : error ? (
+          <div className="text-red-500 text-center">{error}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {carData && carData.length > 0 ? (
+            {carData.length > 0 ? (
               carData.map((item) => (
-                <div key={item.id} className="p-4 bg-white border rounded-lg shadow-sm">
+                <div
+                  key={item.id}
+                  className="p-4 bg-white border rounded-lg shadow-sm"
+                >
                   <img
                     src={item.fotoMobil}
                     alt={item.name}
                     className="w-full h-48 object-cover mb-4 rounded"
-                    onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
-                    }}
+                    onError={(e) =>
+                      (e.target.src =
+                        "https://via.placeholder.com/400x300?text=No+Image")
+                    }
                   />
                   <h3 className="text-lg font-semibold">{item.name}</h3>
-                  <p className="text-gray-500">Price: Rp {item.harga.toLocaleString()}</p>
+                  <p className="text-gray-500">
+                    Price: Rp {item.harga.toLocaleString()}
+                  </p>
                   <p className="text-gray-400">Plate: {item.noPlat}</p>
                   <p className="text-gray-400">Year: {item.tahun}</p>
                 </div>
@@ -119,7 +134,7 @@ const CarDataFetcher = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
