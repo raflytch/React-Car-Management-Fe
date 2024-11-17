@@ -13,7 +13,10 @@ const Dashboard = () => {
           <>
             <h1 className="text-3xl font-bold">Hello From Dashboard</h1>
             <nav>
-              <Link to="/dashboard/update-car/1" className="text-red-600 mr-4">
+              <Link
+                to="/dashboard/update-car/:id"
+                className="text-red-600 mr-4"
+              >
                 Update Car
               </Link>
               <Link to="/dashboard/users" className="text-blue-600">
