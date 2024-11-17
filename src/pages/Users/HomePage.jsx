@@ -1,9 +1,10 @@
-import useProtected from "../../hooks/useProtected";
+import useProtectedAll from "../../hooks/useProtectedAll";
 import Navbar from "../../components/Fragments/Navbar";
 import Footer from "../../components/Fragments/Footer";
 
 const HomePage = () => {
-  useProtected();
+  useProtectedAll(["member"]);
+
   return (
     <div>
       <Navbar />
