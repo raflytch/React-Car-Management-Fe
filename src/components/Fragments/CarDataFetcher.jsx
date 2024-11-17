@@ -1,33 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../Elements/Buttons/Button";
 import Loading from "../Elements/Loading/Loading";
+import axiosInstance from "../../api/axiosInstance";
 
 const CarDataFetcher = () => {
   const [carName, setCarName] = useState("");
-  const [carStock, setCarStock] = useState("");
-  const [CarData, setCarData] = useState([]);
+  const [carPrice, setCarPrice] = useState("");  // Store raw price (without commas)
+  const [carData, setCarData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);  // Error state
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      setLoading(true);
+      setError(null);  // Reset error before making the request
+      try {
+        const response = await axiosInstance.get("/cars");
+        console.log(response);  // Check the response structure
+        if (response.data.isSuccess) {
+          setCarData(response.data.data.cars);  // Update carData with the correct response
+        } else {
+          setError("Failed to fetch cars");
+        }
+      } catch (err) {
+        console.error("Error fetching cars:", err);
+        setError(err.response?.data?.message || "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    fetchData("all");
+    // Add search functionality if needed
   };
 
-  const fetchData = async (category) => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URI}?category=${category}`
-      );
-      const result = await response.json();
-      setCarData(result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setCarData([]);
-    } finally {
-      setLoading(false);
-    }
+  const handlePriceChange = (e) => {
+    // Remove non-numeric characters (only digits)
+    const rawValue = e.target.value.replace(/\D/g, "");
+    setCarPrice(rawValue);  // Set the raw price (without commas)
   };
 
   return (
@@ -53,89 +67,58 @@ const CarDataFetcher = () => {
               className="mt-2 block w-full px-5 py-3 text-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-          <div className="w-full md:w-40">
+          <div className="w-full md:w-40 relative">
             <label
-              htmlFor="carStock"
+              htmlFor="carPrice"
               className="block text-sm font-semibold text-gray-700"
             >
-              Stock
+              Maximum Price
             </label>
+            <div className="absolute left-3 top-9 text-gray-700">Rp</div>
             <input
-              type="number"
-              id="carStock"
-              value={carStock}
-              onChange={(e) => setCarStock(e.target.value)}
-              placeholder="Enter stock"
-              className="mt-2 block w-full px-5 py-3 text-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              type="text"
+              id="carPrice"
+              value={carPrice}  // Display raw numeric value
+              onChange={handlePriceChange}  // Handle raw input (no commas)
+              placeholder="Enter price"
+              className="mt-2 block w-full pl-10 px-5 py-3 text-gray-700 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
         </div>
         <Button type="submit" color="red" width="auto">
-          {loading ? "loading..." : "Search"}
+          {loading ? "Loading..." : "Search"}
         </Button>
       </form>
-
-      <div className="flex items-center justify-center py-6 flex-wrap gap-4">
-        <button
-          onClick={() => fetchData("all")}
-          type="button"
-          className="text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-6 py-3 transition duration-300"
-        >
-          All categories
-        </button>
-        <button
-          onClick={() => fetchData("shoes")}
-          type="button"
-          className="text-gray-900 border border-gray-300 hover:border-gray-200 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-6 py-3 transition duration-300"
-        >
-          Shoes
-        </button>
-        <button
-          onClick={() => fetchData("bags")}
-          type="button"
-          className="text-gray-900 border border-gray-300 hover:border-gray-200 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-6 py-3 transition duration-300"
-        >
-          Bags
-        </button>
-        <button
-          onClick={() => fetchData("electronics")}
-          type="button"
-          className="text-gray-900 border border-gray-300 hover:border-gray-200 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-6 py-3 transition duration-300"
-        >
-          Electronics
-        </button>
-        <button
-          onClick={() => fetchData("gaming")}
-          type="button"
-          className="text-gray-900 border border-gray-300 hover:border-gray-200 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-6 py-3 transition duration-300"
-        >
-          Gaming
-        </button>
-      </div>
 
       <div className="py-6">
         {loading ? (
           <Loading />
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {CarData.length > 0 ? (
-              CarData.map((item, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-white border rounded-lg shadow-sm"
-                >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {carData && carData.length > 0 ? (
+              carData.map((item) => (
+                <div key={item.id} className="p-4 bg-white border rounded-lg shadow-sm">
+                  <img
+                    src={item.fotoMobil}
+                    alt={item.name}
+                    className="w-full h-48 object-cover mb-4 rounded"
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
+                    }}
+                  />
                   <h3 className="text-lg font-semibold">{item.name}</h3>
-                  <p className="text-gray-500">{item.description}</p>
+                  <p className="text-gray-500">Price: Rp {item.harga.toLocaleString()}</p>
+                  <p className="text-gray-400">Plate: {item.noPlat}</p>
+                  <p className="text-gray-400">Year: {item.tahun}</p>
                 </div>
               ))
             ) : (
-              <p>No data available.</p>
+              <div className="col-span-3 text-center text-gray-500">
+                No cars found.
+              </div>
             )}
           </div>
         )}
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 py-6">
       </div>
     </>
   );

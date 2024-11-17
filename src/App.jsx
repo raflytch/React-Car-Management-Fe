@@ -6,6 +6,7 @@ import Dashboard from "./pages/Superadmin/Dashboard";
 import { AuthRoleProvider } from "./contexts/AuthRoleContext";
 import UpdateCar from "./pages/Superadmin/UpdateCar";
 import CarDatasUser from "./pages/Users/CarDatasUser";
+import Marquee from "react-fast-marquee";
 
 function App() {
   return (
