@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthRole } from "../contexts/AuthRoleContext";
 
-const useProtectedAll = () => {
+const useProtectedAll = (allowedRoles) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, login } = useAuthRole();
@@ -25,6 +25,18 @@ const useProtectedAll = () => {
           navigate("/login", { state: { from: location } });
           return;
         }
+
+        const userRole = decodedToken.role?.toLowerCase();
+        console.log(userRole)
+
+        if (!allowedRoles.includes(userRole)) {
+            if (userRole === 'member') {
+                navigate("/");
+            } else {
+                navigate("/dashboard");
+            }      
+            return;
+          }
 
         if (!isAuthenticated) {
           const user = {

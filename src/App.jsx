@@ -6,7 +6,8 @@ import Dashboard from "./pages/Superadmin/Dashboard";
 import { AuthRoleProvider } from "./contexts/AuthRoleContext";
 import UpdateCar from "./pages/Superadmin/UpdateCar";
 import NotFoundPage from "./pages/NotFoundPage";
-import UpdateUser from "./pages/general/UpdateUser";
+import UpdateUserAdmin from "./pages/Superadmin/UpdateUserAdmin";
+import UpdateUser from "./pages/Users/UpdateUser";
 import UserList from "./pages/Superadmin/Users";
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="update-car/:id" element={<UpdateCar />} />
-            <Route path="update-user/:id" element={<UpdateUser/>} />
+            <Route path="update-user/:id" element={<UpdateUserAdmin/>} />
             <Route path="users" element={<UserList />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
