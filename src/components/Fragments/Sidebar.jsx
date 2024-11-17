@@ -18,8 +18,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       } lg:translate-x-0 w-64`}
     >
       <div className="flex flex-col h-full">
-        <div className="p-4 border-b border-gray-300 flex items-center justify-end">
-          <h1 className="text-sm font-bold">Dashboard</h1>
+        <div className="p-4 border-b border-gray-300 flex items-center justify-center">
+          <h1 className="text-lg font-bold">Dashboard</h1>
         </div>
         <nav className="flex-1 p-4">
           <ul className="space-y-4">
