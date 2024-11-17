@@ -1,4 +1,10 @@
-import { createContext, useContext, useReducer, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -14,6 +20,7 @@ const initialState = {
 export const AuthReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN_SUCCESS":
+    case "INITIALIZE":
       return {
         ...state,
         user: action.payload.user,
@@ -22,13 +29,6 @@ export const AuthReducer = (state, action) => {
       };
     case "LOGOUT":
       return initialState;
-    case "INITIALIZE":
-      return {
-        ...state,
-        user: action.payload.user,
-        token: action.payload.token,
-        isAuthenticated: true,
-      };
     default:
       return state;
   }
@@ -36,10 +36,12 @@ export const AuthReducer = (state, action) => {
 
 export const AuthRoleProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const initializeAuth = () => {
+      setIsLoading(true);
       const token = Cookies.get("token");
       if (token) {
         try {
@@ -47,6 +49,7 @@ export const AuthRoleProvider = ({ children }) => {
 
           if (decodedToken.exp * 1000 < Date.now()) {
             Cookies.remove("token");
+            setIsLoading(false);
             return;
           }
 
@@ -59,22 +62,16 @@ export const AuthRoleProvider = ({ children }) => {
             type: "INITIALIZE",
             payload: { user, token },
           });
-
-          if (
-            decodedToken.role?.toLowerCase() === "admin" ||
-            decodedToken.role?.toLowerCase() === "superadmin"
-          ) {
-            navigate("/dashboard");
-          }
         } catch (error) {
           console.error("Token initialization error:", error);
           Cookies.remove("token");
         }
       }
+      setIsLoading(false);
     };
 
     initializeAuth();
-  }, [navigate]);
+  }, []);
 
   const login = (user, token) => {
     Cookies.set("token", token);
@@ -96,8 +93,16 @@ export const AuthRoleProvider = ({ children }) => {
     navigate("/login");
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <AuthRoleContext.Provider value={{ ...state, login, logout }}>
+    <AuthRoleContext.Provider value={{ ...state, login, logout, isLoading }}>
       {children}
     </AuthRoleContext.Provider>
   );

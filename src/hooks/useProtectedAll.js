@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthRole } from "../contexts/AuthRoleContext";
 
-const useProtected = (allowedRoles = ["admin", "superadmin"]) => {
+const useProtectedAll = (allowedRoles) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, login } = useAuthRole();
@@ -27,11 +27,16 @@ const useProtected = (allowedRoles = ["admin", "superadmin"]) => {
         }
 
         const userRole = decodedToken.role?.toLowerCase();
+        console.log(userRole)
 
         if (!allowedRoles.includes(userRole)) {
-          navigate("/");
-          return;
-        }
+            if (userRole === 'member') {
+                navigate("/");
+            } else {
+                navigate("/dashboard");
+            }      
+            return;
+          }
 
         if (!isAuthenticated) {
           const user = {
@@ -54,4 +59,4 @@ const useProtected = (allowedRoles = ["admin", "superadmin"]) => {
   return { isAuthenticated };
 };
 
-export default useProtected;
+export default useProtectedAll;
