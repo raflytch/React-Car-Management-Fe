@@ -12,9 +12,14 @@ const Dashboard = () => {
         {isDashboardRoute && (
           <>
             <h1 className="text-3xl font-bold">Hello From Dashboard</h1>
-            <Link to="/dashboard/update-car/1" className="text-red-600">
-              Click Me
-            </Link>
+            <nav>
+              <Link to="/dashboard/update-car/1" className="text-red-600 mr-4">
+                Update Car
+              </Link>
+              <Link to="/dashboard/users" className="text-blue-600">
+                Users List
+              </Link>
+            </nav>
           </>
         )}
         <Outlet />

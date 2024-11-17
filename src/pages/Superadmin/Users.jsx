@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
 import axios from "axios";
-import ProtectedRoute from "../../components/ProtectedRoute";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -14,7 +12,6 @@ const UserList = () => {
       setError(null);
       try {
         const response = await axios.get("/api/v1/users");
-        console.log(response.data);
         if (response.data.isSuccess) {
           setUsers(response.data.data.users);
         } else {
@@ -42,32 +39,30 @@ const UserList = () => {
   }
 
   return (
-    <ProtectedRoute>
-      <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
-        <h1 className="text-2xl font-bold mb-4">User List</h1>
-        <ul className="space-y-4">
-          {users.map((user) => (
-            <li
-              key={user.id}
-              className="flex items-center gap-4 p-4 bg-gray-100 rounded-md shadow-sm hover:shadow-lg transition-shadow duration-200"
-            >
-              <img
-                src={user.fotoProfil}
-                alt={`${user.firstName} ${user.lastName}`}
-                className="w-16 h-16 rounded-full object-cover border"
-              />
-              <div>
-                <p className="text-lg font-semibold">{`${user.firstName} ${user.lastName}`}</p>
-                <p className="text-gray-600">{user.email}</p>
-                <p className="text-sm text-gray-500 capitalize">
-                  Role: {user.role}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </ProtectedRoute>
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
+      <h1 className="text-2xl font-bold mb-4">User List</h1>
+      <ul className="space-y-4">
+        {users.map((user) => (
+          <li
+            key={user.id}
+            className="flex items-center gap-4 p-4 bg-gray-100 rounded-md shadow-sm hover:shadow-lg transition-shadow duration-200"
+          >
+            <img
+              src={user.fotoProfil}
+              alt={`${user.firstName} ${user.lastName}`}
+              className="w-16 h-16 rounded-full object-cover border"
+            />
+            <div>
+              <p className="text-lg font-semibold">{`${user.firstName} ${user.lastName}`}</p>
+              <p className="text-gray-600">{user.email}</p>
+              <p className="text-sm text-gray-500 capitalize">
+                Role: {user.role}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

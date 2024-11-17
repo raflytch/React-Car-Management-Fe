@@ -8,10 +8,19 @@ const ProtectedRoute = ({
   allowedRoles = ["admin", "superadmin"],
 }) => {
   const location = useLocation();
-  const { isAuthenticated } = useAuthRole();
+  const { isAuthenticated, isLoading } = useAuthRole();
   const token = Cookies.get("token");
 
-  if (!token) {
+  // Tampilkan loading state selama proses autentikasi
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  if (!token || !isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
@@ -23,13 +32,10 @@ const ProtectedRoute = ({
       return <Navigate to="/" replace />;
     }
 
-    if (!isAuthenticated) {
-      return <Navigate to="/login" state={{ from: location }} replace />;
-    }
-
     return children;
   } catch (error) {
     console.error("Token validation error:", error);
+    Cookies.remove("token");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 };
