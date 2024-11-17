@@ -47,17 +47,17 @@ const UserList = () => {
         {users.map((user) => (
           <li
             key={user.id}
-            className="flex items-center gap-6 p-6 bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105"
+            className="flex flex-col items-center p-6 bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105"
           >
             <img
               src={user.fotoProfil}
               alt={`${user.firstName} ${user.lastName}`}
-              className="w-20 h-20 rounded-full object-cover border-2 border-blue-500"
+              className="w-24 h-24 rounded-full object-cover border-2 border-blue-500 mb-4"
             />
-            <div className="flex-1">
+            <div className="text-center">
               <p className="text-xl font-semibold text-gray-700">{`${user.firstName} ${user.lastName}`}</p>
               <p className="text-gray-500">{user.email}</p>
-              <p className="text-sm text-gray-400 capitalize">
+              <p className="text-sm text-gray-400 capitalize mt-2">
                 Role: {user.role}
               </p>
             </div>
