@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useParams } from "react-router-dom";
+import NotFoundPage from "../NotFoundPage";
 import { fetchDetailsCars as detailsCarService } from "../../services/cars.service";
 import { updateCar as updateCarService } from "../../services/cars.service";
 
 const UpdateCar = () => {
   const { id } = useParams();
+  const [notFound, setNotFound] = useState(false);
   const [carDetails, setCarDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
@@ -17,24 +19,27 @@ const UpdateCar = () => {
     image: null,
   });
 
-  // Fetch car details
   useEffect(() => {
     const loadCarsDetail = async () => {
       setIsLoading(true);
       try {
         await detailsCarService(id, (status, data) => {
           if (status === "Success") {
-            setCarDetails(data);
-            setImagePreview(data.car.fotoMobil);
-            // Set all form data at once
-            setFormData({
-              name: data.car.name || "",
-              year: data.car.tahun || "",
-              licensePlate: data.car.noPlat || "",
-              price: data.car.harga || "",
-              image: null,
-            });
+            if (data && data.car) {
+              setCarDetails(data);
+              setImagePreview(data.car.fotoMobil);
+              setFormData({
+                name: data.car.name || "",
+                year: data.car.tahun || "",
+                licensePlate: data.car.noPlat || "",
+                price: data.car.harga || "",
+                image: null,
+              });
+            } else {
+              setNotFound(true);
+            }
           } else {
+            setNotFound(true);
             console.error("Error fetching car details");
           }
         });
@@ -50,7 +55,6 @@ const UpdateCar = () => {
   const handleImageUpdate = (e) => {
     const fileImage = e.target.files[0];
     if (fileImage) {
-      // Create temporary preview URL for the selected image
       const previewUrl = URL.createObjectURL(fileImage);
       setImagePreview(previewUrl);
       setFormData((prev) => ({
@@ -74,13 +78,11 @@ const UpdateCar = () => {
 
     const submitFormData = new FormData();
 
-    // Append all form fields
     submitFormData.append("name", formData.name);
     submitFormData.append("tahun", formData.year);
     submitFormData.append("noPlat", formData.licensePlate);
     submitFormData.append("harga", formData.price);
 
-    // Only append image if it's a File object (new image selected)
     if (formData.image instanceof File) {
       submitFormData.append("fotoMobil", formData.image);
     }
@@ -89,18 +91,15 @@ const UpdateCar = () => {
       await updateCarService(id, submitFormData, (status, response) => {
         if (status === "Success") {
           console.log("Car updated successfully:", response);
-          // Update the image preview with the new image URL from response
           if (response.car?.fotoMobil) {
             setImagePreview(response.car.fotoMobil);
           }
-          // Reset the file input
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
-            image: null
+            image: null,
           }));
         } else {
           console.error("Error updating car:", response);
-          // Revert to original image if update fails
           if (carDetails?.car?.fotoMobil) {
             setImagePreview(carDetails.car.fotoMobil);
           }
@@ -108,7 +107,6 @@ const UpdateCar = () => {
       });
     } catch (error) {
       console.error("Error in update request:", error);
-      // Revert to original image if update fails
       if (carDetails?.car?.fotoMobil) {
         setImagePreview(carDetails.car.fotoMobil);
       }
@@ -128,6 +126,10 @@ const UpdateCar = () => {
         </div>
       </ProtectedRoute>
     );
+  }
+
+  if (notFound) {
+    return <NotFoundPage />;
   }
 
   return (
@@ -262,215 +264,3 @@ const UpdateCar = () => {
 };
 
 export default UpdateCar;
-
-// import React, { useEffect, useState } from "react";
-// import ProtectedRoute from "../../components/ProtectedRoute";
-// import { useParams } from "react-router-dom";
-// import { fetchDetailsCars as detailsCarService } from "../../services/cars.service";
-// import { updateCar as updateCarService } from "../../services/cars.service";
-
-// const UpdateCar = () => {
-//   const { id } = useParams();
-//   const [carDetails, setCarDetails] = useState([]);
-//   const [name, setName] = useState("");
-//   const [year, setYear] = useState("");
-//   const [licensePlate, setLicensePlate] = useState("");
-//   const [price, setPrice] = useState("");
-//   const [image, setImage] = useState(null);
-//   const [status, setStatus] = useState(null);
-//   const [response, setResponse] = useState(null);
-
-//   useEffect(() => {
-//     const loadCarsDetail = async () => {
-//       await detailsCarService(id, (status, data) => {
-//         if (status === "Success") {
-//           console.log(data);
-//           setCarDetails(data);
-//         } else {
-//           console.error("Error fetching car details");
-//         }
-//       });
-//     };
-//     loadCarsDetail();
-//   }, [id]);
-
-//   useEffect(() => {
-//     if (carDetails?.car) {
-//       setName(carDetails.car.name);
-//     }
-//   }, [carDetails]);
-
-//   useEffect(() => {
-//     if (carDetails?.car) {
-//       setYear(carDetails.car.tahun);
-//     }
-//   }, [carDetails]);
-
-//   useEffect(() => {
-//     if (carDetails?.car) {
-//       setLicensePlate(carDetails.car.noPlat);
-//     }
-//   }, [carDetails]);
-
-//   useEffect(() => {
-//     if (carDetails?.car) {
-//       setPrice(carDetails.car.harga);
-//     }
-//   }, [carDetails]);
-
-//   useEffect(() => {
-//     if (carDetails?.car) {
-//       setImage(carDetails.car.fotoMobil);
-//     }
-//   }, [carDetails]);
-
-//   const handleImageUpdate = (e) => {
-//     const fileImage = e.target.files[0];
-//     if (fileImage) {
-//       setImage(fileImage);
-//     }
-//   };
-
-//   const handleUpdate = async (e) => {
-//     e.preventDefault();
-//     const formData = new FormData();
-//     formData.append("name", name);
-//     formData.append("tahun", year);
-//     formData.append("noPlat", licensePlate);
-//     formData.append("harga", price);
-
-//     if (image instanceof File) {
-//       formData.append("fotoMobil", image);
-//       console.log("Image being sent:", image);
-//       console.log("FormData entries:");
-//       for (let pair of formData.entries()) {
-//         console.log(pair[0], pair[1]);
-//       }
-//     }
-//     try {
-//       await updateCarService(id, formData, (status, response) => {
-//         if (status === "Success") {
-//           console.log("Car updated successfully:", response);
-//         } else {
-//           console.error("Error updating car:", response);
-//         }
-//       });
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-//   return (
-//     <ProtectedRoute>
-//       <section className="bg-gray-100 min-h-screen flex items-center justify-center">
-//         <div className="w-full max-w-2xl px-4 py-16 sm:px-6">
-//           <div className="rounded-lg bg-white p-8 shadow-lg">
-//             <form
-//               onSubmit={handleUpdate}
-//               encType="multipart/form-data"
-//               action="#"
-//               className="space-y-4"
-//             >
-//               <div>
-//                 <label className="" htmlFor="carName">
-//                   Car Name
-//                 </label>
-//                 <input
-//                   className="w-full rounded-lg border-gray-200 p-3 text-sm"
-//                   placeholder={carDetails?.car?.name || "Car"}
-//                   value={name}
-//                   onChange={(e) => {
-//                     setName(e.target.value);
-//                   }}
-//                   type="text"
-//                   id="carName"
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="" htmlFor="year">
-//                   Year
-//                 </label>
-//                 <input
-//                   className="w-full rounded-lg border-gray-200 p-3 text-sm"
-//                   placeholder={carDetails?.car?.tahun}
-//                   value={year}
-//                   onChange={(e) => {
-//                     setYear(e.target.value);
-//                   }}
-//                   type="text"
-//                   id="year"
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="" htmlFor="licensePlate">
-//                   License Plate
-//                 </label>
-//                 <input
-//                   className="w-full rounded-lg border-gray-200 p-3 text-sm"
-//                   placeholder={
-//                     carDetails?.car?.noPlat || "License Plate hilang"
-//                   }
-//                   value={licensePlate}
-//                   onChange={(e) => setLicensePlate(e.target.value)}
-//                   type="text"
-//                   id="licensePlate"
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="" htmlFor="price">
-//                   Price
-//                 </label>
-//                 <input
-//                   className="w-full rounded-lg border-gray-200 p-3 text-sm"
-//                   placeholder={carDetails?.car?.harga}
-//                   value={price}
-//                   onChange={(e) => {
-//                     setPrice(e.target.value);
-//                   }}
-//                   type="text"
-//                   id="price"
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="" htmlFor="carImage">
-//                   Car Image
-//                 </label>
-//                 {carDetails?.car?.fotoMobil ? (
-//                   <img
-//                     src={carDetails.car.fotoMobil}
-//                     alt="Car"
-//                     className="mt-4 w-full h-48 object-cover rounded-lg"
-//                   />
-//                 ) : (
-//                   <p className="text-gray-500">No image available</p>
-//                 )}
-//                 <input
-//                   className="w-full rounded-lg border-gray-200 p-3 text-sm"
-//                   type="file"
-//                   accept="image/*"
-//                   onChange={handleImageUpdate}
-//                   id="carImage"
-//                 />
-//               </div>
-
-//               <div className="mt-4">
-//                 <button
-//                   type="submit"
-//                   className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto"
-//                 >
-//                   Update
-//                 </button>
-//               </div>
-//             </form>
-//           </div>
-//         </div>
-//       </section>
-//     </ProtectedRoute>
-//   );
-// };
-
-// export default UpdateCar;

@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import Button from "../Elements/Buttons/Button";
-import Loading from "../Elements/Loading/Loading";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import useFetchedCars from "../../hooks/useFetchedCars";
@@ -13,7 +14,6 @@ const CarDataFetcher = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted with:", { carName, carPrice });
     await updateFilters({
       name: carName,
       harga: carPrice ? carPrice.replace(/[^\d]/g, "") : "",
@@ -28,7 +28,6 @@ const CarDataFetcher = () => {
           currency: "IDR",
         }).format(rawValue)
       : "";
-
     setCarPrice(formattedValue);
   };
 
@@ -90,9 +89,23 @@ const CarDataFetcher = () => {
 
       <div className="py-6">
         {loading ? (
-          <Loading />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-8">
+            {/* Render Skeletons */}
+            {[...Array(6)].map((_, index) => (
+              <div
+                key={index}
+                className="p-4 bg-white border rounded-lg shadow-sm"
+              >
+                <Skeleton height={192} className="mb-4" />
+                <Skeleton width="80%" height={24} className="mb-2" />
+                <Skeleton width="60%" height={20} className="mb-1" />
+                <Skeleton width="50%" height={20} className="mb-1"  />
+                <Skeleton width="40%" height={20} />
+              </div>
+            ))}
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-8">
             {cars.length > 0 ? (
               cars.map((item) => (
                 <div
