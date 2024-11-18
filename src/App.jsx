@@ -18,7 +18,7 @@ function App() {
       <AuthRoleProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/car" element={<CarDataFetcher />} />
+          <Route path="car" element={<CarDataFetcher />} />
           <Route path="/update-user/:id" element={<UpdateUser />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

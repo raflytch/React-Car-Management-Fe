@@ -56,6 +56,9 @@ export const AuthRoleProvider = ({ children }) => {
           const user = {
             email: decodedToken.email,
             role: decodedToken.role,
+            firstName: decodedToken.firstName,
+            lastName: decodedToken.lastName,
+            fotoProfil: decodedToken.fotoProfil,
           };
 
           dispatch({

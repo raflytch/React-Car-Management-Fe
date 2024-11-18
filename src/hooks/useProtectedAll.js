@@ -27,7 +27,7 @@ const useProtectedAll = (allowedRoles) => {
         }
 
         const userRole = decodedToken.role?.toLowerCase();
-        console.log(userRole)
+        // console.log(userRole)
 
         if (!allowedRoles.includes(userRole)) {
             if (userRole === 'member') {

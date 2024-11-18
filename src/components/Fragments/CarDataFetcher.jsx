@@ -1,56 +1,52 @@
 import { useState, useEffect } from "react";
-import axiosInstance from "../../api/axiosInstance";
 import Button from "../Elements/Buttons/Button";
 import Loading from "../Elements/Loading/Loading";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
+import useFetchedCars from "../../hooks/useFetchedCars";
 
 const CarDataFetcher = () => {
-  const [carName, setCarName] = useState("");
-  const [carPrice, setCarPrice] = useState("");
-  const [carData, setCarData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { cars, pagination, getCars, loading, updateFilters, filters } =
+    useFetchedCars();
+  const [carName, setCarName] = useState(filters.name);
+  const [carPrice, setCarPrice] = useState(filters.harga);
 
-  useEffect(() => {
-    const fetchCars = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await axiosInstance.get(`/cars`);
-        console.log("Response Data:", response.data);
-        if (response.data.isSuccess) {
-          setCarData(response.data.data.cars);
-        } else {
-          setError(response.data.message || "Failed to fetch cars");
-        }
-      } catch (err) {
-        console.error("Axios Error:", err);
-        setError(err.response?.data?.message || "An unexpected error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCars();
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Car Name:", carName);
-    console.log("Submitted Car Price:", carPrice);
+    console.log("Form submitted with:", { carName, carPrice });
+    await updateFilters({
+      name: carName,
+      harga: carPrice ? carPrice.replace(/[^\d]/g, "") : "",
+    });
   };
 
   const handlePriceChange = (e) => {
     const rawValue = e.target.value.replace(/\D/g, "");
-    setCarPrice(rawValue);
+    const formattedValue = rawValue
+      ? new Intl.NumberFormat("id-ID", {
+          style: "decimal",
+          currency: "IDR",
+        }).format(rawValue)
+      : "";
+
+    setCarPrice(formattedValue);
   };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      getCars(newPage, filters);
+    }
+  };
+
+  // useEffect(() => {
+  //   getCars(1);
+  // }, []);
 
   return (
     <div className="p-6">
       <div className="mb-6">
         <Navbar />
       </div>
-      {/* Form */}
       <form
         className="flex flex-col md:flex-row items-end justify-center gap-6"
         onSubmit={handleSubmit}
@@ -99,12 +95,10 @@ const CarDataFetcher = () => {
       <div className="py-6">
         {loading ? (
           <Loading />
-        ) : error ? (
-          <div className="text-red-500 text-center">{error}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {carData.length > 0 ? (
-              carData.map((item) => (
+            {cars.length > 0 ? (
+              cars.map((item) => (
                 <div
                   key={item.id}
                   className="p-4 bg-white border rounded-lg shadow-sm"
@@ -120,7 +114,13 @@ const CarDataFetcher = () => {
                   />
                   <h3 className="text-lg font-semibold">{item.name}</h3>
                   <p className="text-gray-500">
-                    Price: Rp {item.harga.toLocaleString()}
+                    Price: Rp{" "}
+                    {new Intl.NumberFormat({
+                      style: "currency",
+                      currency: "IDR",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    }).format(item.harga)}
                   </p>
                   <p className="text-gray-400">Plate: {item.noPlat}</p>
                   <p className="text-gray-400">Year: {item.tahun}</p>
@@ -133,6 +133,54 @@ const CarDataFetcher = () => {
             )}
           </div>
         )}
+      </div>
+
+      {pagination.totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <button
+            onClick={() => handlePageChange(pagination.currentPage - 1)}
+            disabled={pagination.currentPage === 1}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+
+          <div className="flex items-center gap-1">
+            {[...Array(pagination.totalPages)].map((_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={`px-4 py-2 text-sm font-medium rounded-md ${
+                  pagination.currentPage === index + 1
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => handlePageChange(pagination.currentPage + 1)}
+            disabled={pagination.currentPage === pagination.totalPages}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
+      <div className="text-center mt-4">
+        <p className="text-sm text-gray-500">
+          Showing {pagination.totalData} car{pagination.totalData !== 1 && "s"}{" "}
+          in
+          {pagination.totalPages} page{pagination.totalPages !== 1 && "s"}.
+        </p>
+      </div>
+
+      <div className="mt-12">
+        <Footer />
       </div>
     </div>
   );

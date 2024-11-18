@@ -1,17 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-
 const Marquee = () => {
-  const cardRefs = useRef([]);
-  const [maxHeight, setMaxHeight] = useState(0);
-
-  useEffect(() => {
-    // Mengambil tinggi maksimal dari semua card
-    if (cardRefs.current.length > 0) {
-      const heights = cardRefs.current.map((ref) => ref.offsetHeight);
-      setMaxHeight(Math.max(...heights));
-    }
-  }, []);
-
   const profiles = [
     { name: "Alif Ramadhan", role: "Fullstack Developer" },
     { name: "Rafly Aziz", role: "Fullstack Developer" },
@@ -28,22 +15,22 @@ const Marquee = () => {
       <marquee behavior="scroll" direction="left" scrollamount="10">
         <div className="flex space-x-8">
           {profiles.map((profile, index) => (
-            <div
-              key={index}
-              ref={(el) => (cardRefs.current[index] = el)}
-              className={`flex flex-col items-center bg-gray-200 p-4 rounded-lg shadow-lg`}
-              style={{ minHeight: `${maxHeight}px` }}
-            >
-              <img
-                src="https://via.placeholder.com/100x100"
-                alt="Profile"
-                className="w-24 h-24 rounded-full object-cover mb-4"
-              />
-              <div className="text-center">
-                <p className="text-sm text-gray-700">{profile.role}</p>
-                <p className="mt-2 text-gray-500">{profile.name}</p>
-              </div>
-            </div>
+           <div
+           key={index}
+           className="flex flex-col items-center bg-red-400 p-6 rounded-lg shadow-md transform transition duration-300 hover:scale-105 hover:shadow-lg"
+         >
+           <img
+             src={`src/assets/images/${
+               profile.name === "Nita Fitrotul" ? "girl.jpg" : "boy.jpg"
+             }`}
+             alt="Profile"
+             className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-white"
+           />
+           <div className="text-center">
+             <p className="text-sm text-white font-semibold">{profile.role}</p>
+             <p className="mt-2 text-gray-200">{profile.name}</p>
+           </div>
+         </div>
           ))}
         </div>
       </marquee>
