@@ -57,7 +57,6 @@ const CarDataFetcher = () => {
           currency: "IDR",
         }).format(rawValue)
       : "";
-
     setCarPrice(formattedValue);
   };
 
