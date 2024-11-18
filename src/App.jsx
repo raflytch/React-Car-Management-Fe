@@ -10,6 +10,7 @@ import UpdateUserAdmin from "./pages/Superadmin/UpdateUserAdmin";
 import UpdateUser from "./pages/Users/UpdateUser";
 import UserList from "./pages/Superadmin/Users";
 import CarDataFetcher from "./components/Fragments/CarDataFetcher";
+import CarsList from "./pages/Superadmin/Cars";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="update-car/:id" element={<UpdateCar />} />
             <Route path="update-user/:id" element={<UpdateUserAdmin />} />
             <Route path="users" element={<UserList />} />
+            <Route path="cars" element={<CarsList />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
