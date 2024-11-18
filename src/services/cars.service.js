@@ -53,4 +53,19 @@ const updateCar = async (id, data, callback) => {
   }
 };
 
-export { fetchCars, fetchDetailsCars, updateCar };
+const createCar = async (data, callback) => {
+  try {
+    const response = await axiosInstance.post("/cars", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    const newCar = response.data.data;
+    callback("Success", newCar);
+  } catch (err) {
+    const errorMessage = err.response?.data?.message || "An error occurred";
+    callback("Error", errorMessage);
+  }
+};
+
+export { fetchCars, fetchDetailsCars, updateCar, createCar };
