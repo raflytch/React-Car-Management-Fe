@@ -51,7 +51,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 <span className="hidden sm:block text-gray-800 font-semibold text-sm">
-                  Hello, {user.firstName}
+                  Hello, {user.email.split("@")[0]}
                 </span>
                 <Button color="red" onAction={logout} width="auto">
                   Logout

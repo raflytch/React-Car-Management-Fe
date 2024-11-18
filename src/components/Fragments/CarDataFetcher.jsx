@@ -38,10 +38,6 @@ const CarDataFetcher = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getCars(1);
-  // }, []);
-
   return (
     <div>
       <div className="mb-6">
