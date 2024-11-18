@@ -1,5 +1,20 @@
 import axiosInstance from "../api/axiosInstance";
 
+const carById = async (params, callback ) => {
+  try {
+    const response = await axiosInstance.get("/cars", {
+      params: {
+        id: params,
+      },
+    });
+    const carData = response.data.data;
+    callback("Success", carData);
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || "An error occurred";
+    callback("Error", errorMessage);
+  }
+};
+
 const fetchDetailsCars = async (id, callback) => {
   try {
     const response = await axiosInstance.get(`/cars/${id}`);
@@ -22,4 +37,4 @@ const updateCar = async (id, data, callback) => {
   }
 };
 
-export { fetchDetailsCars, updateCar };
+export { carById, fetchDetailsCars, updateCar };
