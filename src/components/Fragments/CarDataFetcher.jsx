@@ -11,14 +11,13 @@ const CarDataFetcher = () => {
   const [carName, setCarName] = useState(filters.name);
   const [carPrice, setCarPrice] = useState(filters.harga);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Update the filters and fetch the cars
-    updateFilters({
+    console.log("Form submitted with:", { carName, carPrice });
+    await updateFilters({
       name: carName,
       harga: carPrice ? carPrice.replace(/[^\d]/g, "") : "",
     });
-    getCars(1);
   };
 
   const handlePriceChange = (e) => {
@@ -35,13 +34,13 @@ const CarDataFetcher = () => {
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination.totalPages) {
-      getCars(newPage);
+      getCars(newPage, filters);
     }
   };
 
-  useEffect(() => {
-    getCars(1);
-  }, []);
+  // useEffect(() => {
+  //   getCars(1);
+  // }, []);
 
   return (
     <div className="p-6">

@@ -15,19 +15,19 @@ const useFetchedCars = () => {
     harga: "",
   });
 
-  const getCars = async (page = 1) => {
+  const getCars = async (page = 1, currentFilters = filters) => {
     try {
       setLoading(true);
 
-      // Format harga jika ada
-      const harga = filters.harga ? filters.harga.replace(/[^\d]/g, "") : "";
-
       const params = {
         page,
-        name: filters.name,
-        // Pastikan harga hanya ditambahkan jika ada
-        ...(harga && { harga }),
+        name: currentFilters.name,
+        harga: currentFilters.harga
+          ? currentFilters.harga.replace(/[^\d]/g, "")
+          : "",
       };
+
+      console.log("Hook sending params:", params);
 
       const response = await fetchCars(page, 6, params);
 
@@ -47,6 +47,7 @@ const useFetchedCars = () => {
         });
       }
     } catch (error) {
+      console.error("GetCars error:", error);
       Swal.fire({
         title: "Error",
         text: error.message || "Failed to fetch cars",
@@ -58,13 +59,18 @@ const useFetchedCars = () => {
     }
   };
 
-  const updateFilters = (newFilters) => {
-    setFilters(newFilters);
-    getCars(1);
+  const updateFilters = async (newFilters) => {
+    const updatedFilters = {
+      ...filters,
+      ...newFilters,
+    };
+    console.log("Updating filters to:", updatedFilters);
+    setFilters(updatedFilters);
+    await getCars(1, updatedFilters);
   };
 
   useEffect(() => {
-    getCars(1);
+    getCars(1, filters);
   }, []);
 
   return { cars, loading, pagination, getCars, updateFilters, filters };
