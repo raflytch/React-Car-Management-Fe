@@ -42,6 +42,14 @@ const CarDataFetcher = () => {
       <div className="mb-6">
         <Navbar />
       </div>
+      <section className="space-y-16 px-8">
+        <div className="relative text-center py-20  from-blue-500 to-red-500 bg-gradient-to-br  text-white rounded-lg shadow-lg overflow-hidden ">
+          <h1 className="text-4xl font-bold tracking-tight">Hallo</h1>
+          <p className="mt-2 text-lg font-medium text-gray-100">
+            Welcome to the car search application
+          </p>
+          <div className="mt-6 h-1 w-24 mx-auto bg-white rounded-full"></div>
+        </div>
       <form
         className="flex flex-col md:flex-row items-end justify-center gap-6"
         onSubmit={handleSubmit}
@@ -86,6 +94,7 @@ const CarDataFetcher = () => {
           Search
         </Button>
       </form>
+      </section>
 
       <div className="py-6">
         {loading ? (
@@ -99,7 +108,7 @@ const CarDataFetcher = () => {
                 <Skeleton height={192} className="mb-4" />
                 <Skeleton width="80%" height={24} className="mb-2" />
                 <Skeleton width="60%" height={20} className="mb-1" />
-                <Skeleton width="50%" height={20} className="mb-1"  />
+                <Skeleton width="50%" height={20} className="mb-1" />
                 <Skeleton width="40%" height={20} />
               </div>
             ))}
@@ -151,7 +160,7 @@ const CarDataFetcher = () => {
             disabled={pagination.currentPage === 1}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Previous
+            Prev
           </button>
 
           <div className="flex items-center gap-1">

@@ -42,7 +42,9 @@ const fetchDetailsCars = async (id, callback) => {
 
 const updateCar = async (id, data, callback) => {
   try {
-    const response = await axiosInstance.patch(`/cars/${id}`, data);
+    const response = await axiosInstance.patch(`/cars/${id}`, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     const updatedCar = response.data.data;
     callback("Success", updatedCar);
   } catch (err) {
