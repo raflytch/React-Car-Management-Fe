@@ -1,56 +1,28 @@
 import { useState, useEffect } from "react";
-import axiosInstance from "../../api/axiosInstance";
 import Button from "../Elements/Buttons/Button";
 import Loading from "../Elements/Loading/Loading";
 import Navbar from "./Navbar";
-import useProtectedAll from "../../hooks/useProtectedAll";
 import Footer from "./Footer";
 import useFetchedCars from "../../hooks/useFetchedCars";
 
 const CarDataFetcher = () => {
-  useProtectedAll(["member"]);
-  const [carName, setCarName] = useState("");
-  const [carPrice, setCarPrice] = useState("");
-  const [carData, setCarData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const { cars, pagination, getCars } = useFetchedCars();
-
-  const fetchCars = async (name, price) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const rawPrice = price ? price.replace(/[^\d]/g, '') : '';
-      const params = {
-        name: name || '', 
-        harga: rawPrice || '',
-      };
-      const response = await axiosInstance.get(`/cars/filter`, {
-        params
-      });
-      if (response.data.isSuccess) {
-        setCarData(response.data.data.cars);
-      } else {
-        setError(response.data.message || "Failed to fetch cars");
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "An unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCars();
-  }, []);
+  const { cars, pagination, getCars, loading, updateFilters, filters } =
+    useFetchedCars();
+  const [carName, setCarName] = useState(filters.name);
+  const [carPrice, setCarPrice] = useState(filters.harga);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchCars(carName, carPrice);
+    // Update the filters and fetch the cars
+    updateFilters({
+      name: carName,
+      harga: carPrice ? carPrice.replace(/[^\d]/g, "") : "",
+    });
+    getCars(1);
   };
 
   const handlePriceChange = (e) => {
-    const rawValue = e.target.value.replace(/\D/g, ''); 
+    const rawValue = e.target.value.replace(/\D/g, "");
     const formattedValue = rawValue
       ? new Intl.NumberFormat("id-ID", {
           style: "decimal",
@@ -66,6 +38,10 @@ const CarDataFetcher = () => {
       getCars(newPage);
     }
   };
+
+  useEffect(() => {
+    getCars(1);
+  }, []);
 
   return (
     <div className="p-6">
@@ -120,12 +96,10 @@ const CarDataFetcher = () => {
       <div className="py-6">
         {loading ? (
           <Loading />
-        ) : error ? (
-          <div className="text-red-500 text-center">{error}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {carData.length > 0 ? (
-              carData.map((item) => (
+            {cars.length > 0 ? (
+              cars.map((item) => (
                 <div
                   key={item.id}
                   className="p-4 bg-white border rounded-lg shadow-sm"
@@ -141,11 +115,12 @@ const CarDataFetcher = () => {
                   />
                   <h3 className="text-lg font-semibold">{item.name}</h3>
                   <p className="text-gray-500">
-                    Price: Rp {new Intl.NumberFormat({ 
-                      style: 'currency', 
-                      currency: 'IDR',
+                    Price: Rp{" "}
+                    {new Intl.NumberFormat({
+                      style: "currency",
+                      currency: "IDR",
                       minimumFractionDigits: 0,
-                      maximumFractionDigits: 0
+                      maximumFractionDigits: 0,
                     }).format(item.harga)}
                   </p>
                   <p className="text-gray-400">Plate: {item.noPlat}</p>
@@ -197,12 +172,17 @@ const CarDataFetcher = () => {
         </div>
       )}
 
-      <div className="text-center text-sm text-gray-500 mt-2">
-        Page {pagination.currentPage} of {pagination.totalPages} (
-        {pagination.totalData} total cars)
+      <div className="text-center mt-4">
+        <p className="text-sm text-gray-500">
+          Showing {pagination.totalData} car{pagination.totalData !== 1 && "s"}{" "}
+          in
+          {pagination.totalPages} page{pagination.totalPages !== 1 && "s"}.
+        </p>
       </div>
-      
-      <Footer />
+
+      <div className="mt-12">
+        <Footer />
+      </div>
     </div>
   );
 };

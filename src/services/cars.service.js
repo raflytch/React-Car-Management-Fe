@@ -1,17 +1,31 @@
 import axiosInstance from "../api/axiosInstance";
 
-const carById = async (params, callback ) => {
+const fetchCars = async (page = 1, limit = 6, filters = {}) => {
   try {
-    const response = await axiosInstance.get("/cars", {
+    const response = await axiosInstance.get("/cars/filter", {
       params: {
-        id: params,
+        page: Number(page),
+        limit: Number(limit),
+        name: filters.name,
+        harga: filters.harga,
       },
     });
-    const carData = response.data.data;
-    callback("Success", carData);
+
+    if (response.data.isSuccess) {
+      return {
+        success: true,
+        data: response.data.data,
+      };
+    }
+    return {
+      success: false,
+      message: response.data.message || "Failed to fetch cars",
+    };
   } catch (error) {
-    const errorMessage = error.response?.data?.message || "An error occurred";
-    callback("Error", errorMessage);
+    return {
+      success: false,
+      message: error.response?.data?.message || "An error occurred",
+    };
   }
 };
 
@@ -37,4 +51,4 @@ const updateCar = async (id, data, callback) => {
   }
 };
 
-export { carById, fetchDetailsCars, updateCar };
+export { fetchCars, fetchDetailsCars, updateCar };
