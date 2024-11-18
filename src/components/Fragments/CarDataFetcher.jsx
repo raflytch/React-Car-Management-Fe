@@ -42,6 +42,14 @@ const CarDataFetcher = () => {
       <div className="mb-6">
         <Navbar />
       </div>
+      <section className="space-y-16 px-8">
+        <div className="relative text-center py-20  from-blue-500 to-red-500 bg-gradient-to-br  text-white rounded-lg shadow-lg overflow-hidden ">
+          <h1 className="text-4xl font-bold tracking-tight">Hallo</h1>
+          <p className="mt-2 text-lg font-medium text-gray-100">
+            Welcome to the car search application
+          </p>
+          <div className="mt-6 h-1 w-24 mx-auto bg-white rounded-full"></div>
+        </div>
       <form
         className="flex flex-col md:flex-row items-end justify-center gap-6"
         onSubmit={handleSubmit}
@@ -86,6 +94,7 @@ const CarDataFetcher = () => {
           Search
         </Button>
       </form>
+      </section>
 
       <div className="py-6">
         {loading ? (
