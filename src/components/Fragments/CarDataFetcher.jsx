@@ -173,8 +173,7 @@ const CarDataFetcher = () => {
       <div className="text-center mt-4">
         <p className="text-sm text-gray-500">
           Showing {pagination.totalData} car{pagination.totalData !== 1 && "s"}{" "}
-          in
-          {pagination.totalPages} page{pagination.totalPages !== 1 && "s"}.
+          in {pagination.totalPages} page{pagination.totalPages !== 1 && "s"}.
         </p>
       </div>
 
