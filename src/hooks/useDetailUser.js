@@ -1,32 +1,37 @@
 import { userById } from "../services/users.service";
 import Swal from "sweetalert2";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const useDetailUser = (id) => {
-
     const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
 
     const userDetail = async () => {
         setLoading(true);
-        await userById(id, (status, response) => {
+        try {
+            const response = await userById(id);
+            setUser(response);
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Get user data Failed",
+                text: error || "An error occurred during get data.",
+            });
+        } finally {
             setLoading(false);
-            if (status === "Success") {
-                return response
-            }
-            else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Get user data Failed",
-                    text: response || "An error occurred during get data.",
-                });
-            }
-        });
-    }
+        }
+    };
+
+    useEffect(() => {
+        if (id) userDetail();
+    }, [id]);
 
     return {
         userDetail,
-        loading
-    }
-}
+        loading,
+        user,
+    };
+};
+
 
 export default useDetailUser;

@@ -1,60 +1,52 @@
 import axiosInstance from "../api/axiosInstance";
 
-const userById = async (params, callback) => {
-  try {
-    const response = await axiosInstance.get("/users", {
-      params: {
-        id: params,
-      },
-    });
-    const userData = response.data.data;
-    callback("Success", userData);
-  } catch (error) {
-    const errorMessage = err.response?.data?.message || "An error occurred";
-    callback("Error", errorMessage);
-  }
+const userById = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/users/${id}`);
+        return response.data.data.user;
+    } catch (error) {
+        throw error.response?.data?.message || "An error occurred";
+    }
 };
 
-const updateUser = async (params, data, callback) => {
-  try {
-    const response = await axiosInstance.patch("/users", data, {
-      params: {
-        id: params,
-      },
-    });
-    const userData = response.data.data;
-    callback("Success", userData);
-  } catch (error) {
-    const errorMessage = err.response?.data?.message || "An error occurred";
-    callback("Error", errorMessage);
-  }
+const updateUser = async (id, data) => {
+    try {
+        const response = await axiosInstance.patch(`/users/${id}`, data, {
+            headers: {
+                "Content-Type": "multipart/form-data", // Pastikan `multipart/form-data`
+            },
+        });
+        return response.data.data;
+    } catch (error) {
+        throw error.response?.data?.message || "An error occurred";
+    }
 };
 
 const fetchUsers = async (page = 1, limit = 6) => {
-  try {
-    const response = await axiosInstance.get("/users", {
-      params: {
-        page: Number(page),
-        limit: Number(limit),
-      },
-    });
+    try {
+        const response = await axiosInstance.get("/users", {
+            params: {
+                page: Number(page),
+                limit: Number(limit),
+            },
+        });
 
-    if (response.data.isSuccess) {
-      return {
-        success: true,
-        data: response.data.data,
-      };
+        if (response.data.isSuccess) {
+            return {
+                success: true,
+                data: response.data.data,
+            };
+        }
+        return {
+            success: false,
+            message: response.data.message || "Failed to fetch users",
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: error.response?.data?.message || "An error occurred",
+        };
     }
-    return {
-      success: false,
-      message: response.data.message || "Failed to fetch users",
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: error.response?.data?.message || "An error occurred",
-    };
-  }
 };
 
 export { userById, updateUser, fetchUsers };
