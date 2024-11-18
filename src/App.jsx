@@ -10,7 +10,7 @@ import UpdateUserAdmin from "./pages/Superadmin/UpdateUserAdmin";
 import UpdateUser from "./pages/Users/UpdateUser";
 import UserList from "./pages/Superadmin/Users";
 import CarDataFetcher from "./components/Fragments/CarDataFetcher";
-import CarDetail from "./components/Fragments/CarDetail";
+import DetailsCar from "./pages/Superadmin/DetailsCar";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="cars/:id" element={<CarDetail />} />
+            <Route path="cars/:id" element={<DetailsCar />} />
             <Route path="update-car/:id" element={<UpdateCar />} />
             <Route path="update-user/:id" element={<UpdateUserAdmin />} />
             <Route path="users" element={<UserList />} />

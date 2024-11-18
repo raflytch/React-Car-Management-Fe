@@ -1,39 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axiosInstance from "../../api/axiosInstance";
 import Button from "../Elements/Buttons/Button";
 import Loading from "../Elements/Loading/Loading";
+import useFetchedDetailCar from "../../hooks/useFetchedDetailsCar";
 
 const CarDetail = () => {
-  const { id } = useParams();
-  const [carDetails, setCarDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchCarDetails = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await axiosInstance.get(`/cars/${id}`);
-        console.log("Response Data:", response.data);
-
-        if (response.data.isSuccess) {
-          setCarDetails(response.data.data.car); // Adjusted to match the assumed API structure
-        } else {
-          setError(response.data.message || "Failed to fetch car details");
-        }
-      } catch (err) {
-        console.error("Axios Error:", err);
-        setError(err.response?.data?.message || "An unexpected error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCarDetails();
-  }, [id]);
+  const { carDetails, loading, error } = useFetchedDetailCar()
 
   if (loading) return <Loading />; // Display a loading spinner/component
   if (error) return <p className="text-red-500">{error}</p>; // Display error message
