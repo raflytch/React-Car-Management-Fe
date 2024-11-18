@@ -3,7 +3,9 @@ import carImage from "../../assets/car01.webp";
 import useCreateCar from "../../hooks/useCreateCar";
 
 const CreateCar = () => {
-  const { formData, handleChange, handleSubmit, loading } = useCreateCar();
+  const { formData, imagePreview, handleCreate, handleSubmit, loading } =
+    useCreateCar();
+
   return (
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">
       <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
@@ -15,7 +17,7 @@ const CreateCar = () => {
         </div>
         <form
           onSubmit={handleSubmit}
-          className="mx-auto mb-0 mt-8 max-w-md space-y-4"
+          className="mx-auto mb-0 mt-8 max-w-md space-y-6"
           encType="multipart/form-data"
         >
           <div>
@@ -29,7 +31,7 @@ const CreateCar = () => {
               className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
               placeholder="Enter car name"
               value={formData.name}
-              onChange={handleChange}
+              onChange={handleCreate}
               required
             />
           </div>
@@ -44,7 +46,7 @@ const CreateCar = () => {
               className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
               placeholder="Enter car year"
               value={formData.tahun}
-              onChange={handleChange}
+              onChange={handleCreate}
               required
             />
           </div>
@@ -59,7 +61,7 @@ const CreateCar = () => {
               className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
               placeholder="Enter license plate"
               value={formData.noPlat}
-              onChange={handleChange}
+              onChange={handleCreate}
               required
             />
           </div>
@@ -74,23 +76,45 @@ const CreateCar = () => {
               className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
               placeholder="Enter price"
               value={formData.harga}
-              onChange={handleChange}
+              onChange={handleCreate}
               required
             />
           </div>
-          <div>
-            <label htmlFor="fotoMobil" className="sr-only">
-              Car Image
+          <div className="w-full">
+            {imagePreview && (
+              <div className="mb-4">
+                <img
+                  src={imagePreview}
+                  alt="Car Preview"
+                  className="w-full h-48 sm:h-56 md:h-64 object-cover rounded-lg shadow-md"
+                />
+              </div>
+            )}
+            <label
+              htmlFor="carImage"
+              className="block text-center cursor-pointer"
+            >
+              <input
+                type="file"
+                accept="image/*"
+                id="carImage"
+                name="fotoMobil"
+                className="hidden"
+                onChange={handleCreate}
+              />
+              <div className="border-2 border-dashed border-gray-300 p-3 sm:p-4 rounded-lg hover:bg-gray-50 transition">
+                <div className="flex justify-center items-center">
+                  <img
+                    src="../../src/assets/images/upload-image.png"
+                    alt="Upload"
+                    className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
+                  />
+                  <span className="text-gray-600 text-sm sm:text-base">
+                    Upload Car Image
+                  </span>
+                </div>
+              </div>
             </label>
-            <input
-              type="file"
-              name="fotoMobil"
-              id="fotoMobil"
-              className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
-              accept="image/*"
-              onChange={handleChange}
-              required
-            />
           </div>
           <div className="flex justify-end">
             <button
@@ -103,7 +127,7 @@ const CreateCar = () => {
           </div>
         </form>
       </div>
-      <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2">
+      <div className="relative h-64 w-full lg:h-full lg:w-1/2">
         <img
           alt="Add a new car"
           src={carImage}
