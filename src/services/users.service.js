@@ -11,7 +11,11 @@ const userById = async (id) => {
 
 const updateUser = async (id, data) => {
     try {
-        const response = await axiosInstance.patch(`/users/${id}`, data);
+        const response = await axiosInstance.patch(`/users/${id}`, data, {
+            headers: {
+                "Content-Type": "multipart/form-data", // Pastikan `multipart/form-data`
+            },
+        });
         return response.data.data;
     } catch (error) {
         throw error.response?.data?.message || "An error occurred";
