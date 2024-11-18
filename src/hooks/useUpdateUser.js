@@ -2,35 +2,37 @@ import { updateUser } from "../services/users.service";
 import Swal from "sweetalert2";
 import { useState } from "react";
 
-const useUpdateUser = (id, data) => {
+const useUpdateUser = () => {
+    const [loading, setLoading] = useState(false);
 
-    const { loading, setLoading } = useState(false)
-
-    const userUpdate = async () => {
+    const userUpdate = async (id, data) => {
         setLoading(true);
-        await updateUser(id, data, (status, response) => {
+        try {
+            const response = await updateUser(id, data);
+            Swal.fire({
+                icon: "success",
+                title: "Update User Successful!",
+                text: "You have successfully updated user data.",
+            });
+            return response; // Return response if needed
+        } 
+        catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Update User Failed",
+                text: error?.response?.data?.message || error?.message || "An unknown error occurred.",
+            });
+            throw error; // Re-throw error for further handling
+        } 
+        finally {
             setLoading(false);
-            if (status === "Success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "Update User Successful!",
-                    text: "You have successfully new user data.",
-                });
-            }
-            else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Update User Failed",
-                    text: response,
-                });
-            }
-        })
-    }
+        }
+    };
 
     return {
         userUpdate,
-        loading
-    }
-}
+        loading,
+    };
+};
 
 export default useUpdateUser;
