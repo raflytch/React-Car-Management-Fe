@@ -50,7 +50,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               className="w-12 h-12 rounded-full object-cover border border-gray-400"
             />
             <div>
-              <p className="text-gray-800 font-semibold">{user?.firstName}</p>
+              <p className="text-gray-800 font-semibold truncate">
+                {user.firstName} {user.lastName}
+              </p>
             </div>
           </div>
           <button
