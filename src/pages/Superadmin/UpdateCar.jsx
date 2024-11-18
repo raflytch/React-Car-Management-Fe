@@ -34,7 +34,7 @@ const UpdateCar = () => {
       setName(carDetails.car.name);
     }
   }, [carDetails]);
-
+  
   useEffect(() => {
     if (carDetails?.car) {
       setLicensePlate(carDetails.car.noPlat);
