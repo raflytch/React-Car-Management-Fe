@@ -17,6 +17,7 @@
     "react-dom": "^18.3.1",
     "react-fast-marquee": "^1.6.5",
     "react-hook-form": "^7.53.2",
+    "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^6.28.0",
     "sweetalert2": "^11.14.5"
   },
