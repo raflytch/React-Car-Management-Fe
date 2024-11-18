@@ -1,35 +1,21 @@
 import axiosInstance from "../api/axiosInstance";
 
-const userById = async (params, callback) => {
+const userById = async (id) => {
     try {
-        const response = await axiosInstance.get("/users", {
-            params: {
-                id: params
-            }
-        });
-        const userData = response.data.data;
-        callback("Success", userData)
+        const response = await axiosInstance.get(`/users/${id}`);
+        return response.data.data.user;
+    } catch (error) {
+        throw error.response?.data?.message || "An error occurred";
     }
-    catch (error) {
-        const errorMessage = err.response?.data?.message || "An error occurred";
-        callback("Error", errorMessage);
-    }
-}
+};
 
-const updateUser = async (params, data, callback) => {
+const updateUser = async (id, data) => {
     try {
-        const response = await axiosInstance.patch("/users", data, {
-            params: {
-                id: params
-            }
-        });
-        const userData = response.data.data;
-        callback("Success", userData)
+        const response = await axiosInstance.patch(`/users/${id}`, data);
+        return response.data.data;
+    } catch (error) {
+        throw error.response?.data?.message || "An error occurred";
     }
-    catch (error) {
-        const errorMessage = err.response?.data?.message || "An error occurred";
-        callback("Error", errorMessage);
-    }
-}
+};
 
-export { userById, updateUser }
+export { userById, updateUser };

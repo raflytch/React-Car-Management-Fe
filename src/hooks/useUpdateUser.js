@@ -8,6 +8,14 @@ const useUpdateUser = (id, data) => {
 
     const userUpdate = async () => {
         setLoading(true);
+        try {
+            
+        } catch (error) {
+
+        } finally {
+
+        }
+
         await updateUser(id, data, (status, response) => {
             setLoading(false);
             if (status === "Success") {
