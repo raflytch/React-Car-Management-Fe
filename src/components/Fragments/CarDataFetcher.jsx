@@ -37,12 +37,8 @@ const CarDataFetcher = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getCars(1);
-  // }, []);
-
   return (
-    <div className="p-6">
+    <div>
       <div className="mb-6">
         <Navbar />
       </div>
