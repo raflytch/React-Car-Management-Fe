@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { carById } from "../services/cars.service";
+import { useState, useEffect } from "react";
+import { fetchCars } from "../services/cars.service";
 import Swal from "sweetalert2";
 
 const useFetchedCars = () => {
@@ -8,31 +8,46 @@ const useFetchedCars = () => {
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
-    totalData: 0,   
+    totalData: 0,
+  });
+  const [filters, setFilters] = useState({
+    name: "",
+    harga: "",
   });
 
-  const getCars = async (page = 1) => {
+  const getCars = async (page = 1, currentFilters = filters) => {
     try {
       setLoading(true);
-      
-      await carById(page, (status, data) => {
-        if (status === "Success" && data) {
-          setCars(data.cars || []);
-          setPagination({
-            currentPage: parseInt(data.page),
-            totalPages: parseInt(data.totalPages),
-            totalData: parseInt(data.totalData),
-          });
-        } else {
-          Swal.fire({
-            title: "Error",
-            text: data || "Failed to fetch cars",
-            icon: "error",
-            confirmButtonText: "Ok",
-          });
-        }
-      });
+
+      const params = {
+        page,
+        name: currentFilters.name,
+        harga: currentFilters.harga
+          ? currentFilters.harga.replace(/[^\d]/g, "")
+          : "",
+      };
+
+      console.log("Hook sending params:", params);
+
+      const response = await fetchCars(page, 6, params);
+
+      if (response.success && response.data) {
+        setCars(response.data.cars || []);
+        setPagination({
+          currentPage: parseInt(response.data.page),
+          totalPages: parseInt(response.data.totalPages),
+          totalData: parseInt(response.data.totalData),
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: response.message,
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+      }
     } catch (error) {
+      console.error("GetCars error:", error);
       Swal.fire({
         title: "Error",
         text: error.message || "Failed to fetch cars",
@@ -44,11 +59,22 @@ const useFetchedCars = () => {
     }
   };
 
+  const updateFilters = async (newFilters) => {
+    const updatedFilters = {
+      ...filters,
+      ...newFilters,
+    };
+    console.log("Updating filters to:", updatedFilters);
+    setFilters(updatedFilters);
+    await getCars(1, updatedFilters);
+  };
+
   useEffect(() => {
-    getCars(1);
+    getCars(1, filters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { cars, loading, pagination, getCars };
+  return { cars, loading, pagination, getCars, updateFilters, filters };
 };
 
 export default useFetchedCars;
