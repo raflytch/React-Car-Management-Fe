@@ -1,6 +1,18 @@
 import React from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import useFetchedUsers from "../../hooks/useFetchedUsers";
-import Loading from "../../components/Elements/Loading/Loading";
+
+const UserCardSkeleton = () => (
+  <div className="flex flex-col items-center p-5 bg-gray-50 rounded-lg border border-gray-200">
+    <Skeleton circle width={96} height={96} className="mb-4" />
+    <div className="text-center space-y-2 w-full">
+      <Skeleton height={20} width={150} className="mx-auto" />
+      <Skeleton height={17} width={150} className="mx-auto" />
+      <Skeleton height={17} width={100} className="mx-auto" />
+    </div>
+  </div>
+);
 
 const UserList = () => {
   const { users, loading, pagination, getUsers } = useFetchedUsers();
@@ -14,10 +26,18 @@ const UserList = () => {
   return (
     <div className="max-w-6xl mx-auto p-4 bg-white rounded-lg shadow-md">
       <div className="bg-white p-6 rounded-lg shadow-sm">
-        {loading && <Loading />}
-        {!loading && (
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">User List</h1>
+
+        {loading ? (
+          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+            {[...Array(6)].map((_, index) => (
+              <li key={index}>
+                <UserCardSkeleton />
+              </li>
+            ))}
+          </ul>
+        ) : (
           <>
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">User List</h1>
             <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
               {users.length === 0 ? (
                 <p className="col-span-full text-gray-500 text-center">
