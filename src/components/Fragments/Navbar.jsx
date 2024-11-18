@@ -40,10 +40,10 @@ const Navbar = () => {
               Projects
             </Link>
             <Link
-              to="/blog"
+              to="/car"
               className="text-gray-500 transition hover:text-gray-700"
             >
-              Blog
+              Products
             </Link>
           </nav>
 
@@ -51,7 +51,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 <span className="hidden sm:block text-gray-800 font-semibold text-sm">
-                  Hello, {user.email.split("@")[0]}
+                  Hello, {user.firstName}
                 </span>
                 <Button color="red" onAction={logout} width="auto">
                   Logout
@@ -120,11 +120,11 @@ const Navbar = () => {
             Projects
           </Link>
           <Link
-            to="/blog"
+            to="/car"
             className="block text-gray-700 hover:text-gray-900 w-full"
             onClick={() => setIsMenuOpen(false)}
           >
-            Blog
+            Product
           </Link>
         </nav>
 
