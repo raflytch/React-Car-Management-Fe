@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import useProtectedAll from "../../hooks/useProtectedAll";
 import useDetailUser from "../../hooks/useDetailUser";
 import useUpdateUser from "../../hooks/useUpdateUser";
@@ -6,24 +6,21 @@ import { useState, useEffect } from "react";
 
 const UpdateUser = () => {
     useProtectedAll(["member"]);
-    const { id } = useParams(); // Extract `id` from URL params
-    const { userDetail, loading: userLoading, user } = useDetailUser(id);
+    const { id } = useParams();
+    const { user } = useDetailUser(id);
     const [loading, setLoading] = useState(false);
     const { userUpdate } = useUpdateUser();
-    // State untuk mengelola data form
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         email: "",
         phone: "",
-        fotoProfil: null, // Untuk file upload
+        fotoProfil: null,
         password: "",
         confirmPassword: "",
     });
 
-    console.log(formData)
-
-    // Populate formData ketika `user` berhasil di-fetch
     useEffect(() => {
         if (user) {
             setFormData({
@@ -38,7 +35,6 @@ const UpdateUser = () => {
         }
     }, [user]);
 
-    // Handle perubahan input
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -47,7 +43,6 @@ const UpdateUser = () => {
         }));
     };
 
-    // Handle file upload
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setFormData((prev) => ({
@@ -56,7 +51,6 @@ const UpdateUser = () => {
         }));
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -72,21 +66,25 @@ const UpdateUser = () => {
             }
             formDataToSend.append("password", formData.password);
             formDataToSend.append("confirmPassword", formData.confirmPassword);
-            // Kirim data ke backend menggunakan userUpdate
             await userUpdate(id, formDataToSend);
-        } catch (error) {
+        } 
+        catch (error) {
             console.error("Update failed:", error);
-        } finally {
+        } 
+        finally {
             setLoading(false);
         }
     };
 
-    return (
-        <div className="rounded-lg mx-96 my-20 bg-gray-100 p-8 shadow-lg lg:col-span-3 lg:p-12">
+    return (    
+        <div className="rounded-lg md:bg-gray-100 p-8 md:shadow-lg md:mx-32 md:my-16 lg:col-span-3 xl:p-12 xl:mx-96 xl:my-16">
+            <Link to="/"><h4 className="mb-6 underline text-red-600">Back to home</h4></Link>
             {loading ? (
                 <p>Loading...</p>
             ) : (
+                
                 <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
+                    
                     <div>
                         <label className="" htmlFor="firstName">First Name</label><br />
                         <input
