@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import carImage from "../../assets/car01.webp";
+import carImage from "../../assets/images/Car01.webp";
 import useCreateCar from "../../hooks/useCreateCar";
 import Loading from "../../components/Elements/Loading/Loading";
 
