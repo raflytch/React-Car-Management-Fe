@@ -63,8 +63,7 @@ const CarsList = () => {
     getCars(pagination.currentPage, filters);
   });
 
-  useEffect(() => {
-  }, [filters]);
+  useEffect(() => {}, [filters]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination.totalPages) {
@@ -153,7 +152,7 @@ const CarsList = () => {
         />
         <div className="text-center space-y-2">
           <p className="text-xl font-semibold text-gray-800">{car.name}</p>
-          <p className="text-sm text-gray-600 truncate max-w-[200px]">
+          <p className="text-sm text-gray-600 truncate max-w-[200px] mx-auto">
             {car.noPlat}
           </p>
           <p className="text-sm text-gray-500">
