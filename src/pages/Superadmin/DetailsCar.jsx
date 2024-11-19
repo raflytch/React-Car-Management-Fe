@@ -12,13 +12,38 @@ const DetailsCar = () => {
     const navigate = useNavigate()
 
     const handleToUpdate = () => navigate(`/dashboard/update-car/${id}`)
+    const handleNext = () => navigate(`/dashboard/cars/${parseInt(id) + 1}`);
+    const handlePrevious = () => {
+        const previousId = parseInt(id) - 1;
+        if (previousId > 0) {
+            navigate(`/dashboard/cars/${previousId}`);
+        }
+    };
 
     return (
         <div>
             <CarDetail />
-            <div>
-                <Button onAction={handleToUpdate}>Edit</Button>
-            </div>  
+            <div className="flex justify-between mt-6">
+                    <button
+                        onClick={handlePrevious}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        disabled={parseInt(id) <= 1} // Disable if ID is 1 or less
+                    >
+                        Previous
+                    </button>
+                    <button
+                        onClick={handleToUpdate}
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
+                    >
+                        Edit
+                    </button>
+                    <button
+                        onClick={handleNext}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
+                    >
+                        Next
+                    </button>
+            </div>
         </div>
     )
 }
