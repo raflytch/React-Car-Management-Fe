@@ -17,7 +17,7 @@ const FormLogin = () => {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    setFocus("email"); // focus email input field on form load
+    setFocus("email");
   }, [setFocus]);
 
   const handleLogin = async (data) => {

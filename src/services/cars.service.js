@@ -68,4 +68,19 @@ const createCar = async (data, callback) => {
   }
 };
 
-export { fetchCars, fetchDetailsCars, updateCar, createCar };
+const deleteCar = async (id) => {
+  try {
+    const response = await axiosInstance.delete(`/cars/${id}`);
+    return {
+      success: true,
+      message: response.data.message || "Car deleted successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Failed to delete car",
+    };
+  }
+};
+
+export { fetchCars, fetchDetailsCars, updateCar, createCar, deleteCar };
