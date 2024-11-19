@@ -2,6 +2,7 @@ import React from "react";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useUpdateCar } from "../../hooks/useUpdateCar";
 import NotFoundPage from "../NotFoundPage";
+import Loading from "../../components/Elements/Loading/Loading";
 import Button from "../../components/Elements/Buttons/Button";
 
 const UpdateCar = () => {
@@ -12,10 +13,17 @@ const UpdateCar = () => {
     handleImageUpdate,
     handleInputChange,
     handleUpdate,
+    loading,
+    updateLoading,
+    imageLoading,
   } = useUpdateCar();
 
   if (notFound) {
     return <NotFoundPage />;
+  }
+
+  if (loading || updateLoading) {
+    return <Loading />;
   }
 
   return (
@@ -25,7 +33,13 @@ const UpdateCar = () => {
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="w-full">
-                {imagePreview && (
+                {imageLoading && (
+                  <div className="flex justify-center items-center h-48 sm:h-56 md:h-64 bg-gray-200 rounded-lg shadow-md">
+                    <Loading />
+                  </div>
+                )}
+
+                {imagePreview && !imageLoading && (
                   <div className="mb-4">
                     <img
                       src={imagePreview}
@@ -34,6 +48,7 @@ const UpdateCar = () => {
                     />
                   </div>
                 )}
+
                 <div className="w-full">
                   <label
                     htmlFor="carImage"
@@ -145,8 +160,8 @@ const UpdateCar = () => {
                       type="submit"
                       color="red"
                       width="full"
-                      onClick={handleUpdate}
                       className="text-sm sm:text-base p-2.5 sm:p-3"
+                      disabled={updateLoading}
                     >
                       Update Car
                     </Button>
