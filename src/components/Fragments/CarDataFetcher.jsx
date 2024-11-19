@@ -5,8 +5,10 @@ import Button from "../Elements/Buttons/Button";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import useFetchedCars from "../../hooks/useFetchedCars";
+import { useNavigate } from "react-router-dom";
 
 const CarDataFetcher = () => {
+  const navigate = useNavigate();
   const { cars, pagination, getCars, loading, updateFilters, filters } =
     useFetchedCars();
   const [carName, setCarName] = useState(filters.name);
@@ -37,6 +39,10 @@ const CarDataFetcher = () => {
     }
   };
 
+  const handleCardClick = (id) => {
+    navigate(`/car/${id}`);
+  };
+
   return (
     <div>
       <div className="mb-6">
@@ -50,56 +56,55 @@ const CarDataFetcher = () => {
           </p>
           <div className="mt-6 h-1 w-24 mx-auto bg-white rounded-full"></div>
         </div>
-      <form
-        className="flex flex-col md:flex-row items-end justify-center gap-6"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex flex-col md:flex-row items-center gap-6 w-full md:w-auto">
-          <div className="w-full md:w-72">
-            <label
-              htmlFor="carName"
-              className="block text-sm font-semibold text-gray-700"
-            >
-              Car Name
-            </label>
-            <input
-              type="text"
-              id="carName"
-              value={carName}
-              onChange={(e) => setCarName(e.target.value)}
-              placeholder="Enter car name"
-              className="mt-2 block w-full px-5 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        <form
+          className="flex flex-col md:flex-row items-end justify-center gap-6"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex flex-col md:flex-row items-center gap-6 w-full md:w-auto">
+            <div className="w-full md:w-72">
+              <label
+                htmlFor="carName"
+                className="block text-sm font-semibold text-gray-700"
+              >
+                Car Name
+              </label>
+              <input
+                type="text"
+                id="carName"
+                value={carName}
+                onChange={(e) => setCarName(e.target.value)}
+                placeholder="Enter car name"
+                className="mt-2 block w-full px-5 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-          <div className="w-full md:w-40 relative">
-            <label
-              htmlFor="carPrice"
-              className="block text-sm font-semibold text-gray-700"
-            >
-              Maximum Price
-            </label>
-            <div className="absolute left-3 top-9 text-gray-700">Rp</div>
-            <input
-              type="text"
-              id="carPrice"
-              value={carPrice}
-              onChange={handlePriceChange}
-              placeholder="Enter price"
-              className="mt-2 block w-full pl-10 px-5 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="w-full md:w-40 relative">
+              <label
+                htmlFor="carPrice"
+                className="block text-sm font-semibold text-gray-700"
+              >
+                Maximum Price
+              </label>
+              <div className="absolute left-3 top-9 text-gray-700">Rp</div>
+              <input
+                type="text"
+                id="carPrice"
+                value={carPrice}
+                onChange={handlePriceChange}
+                placeholder="Enter price"
+                className="mt-2 block w-full pl-10 px-5 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
-        </div>
-        <Button type="submit" color="red" width="auto">
-          Search
-        </Button>
-      </form>
+          <Button type="submit" color="red" width="auto">
+            Search
+          </Button>
+        </form>
       </section>
 
       <div className="py-6">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-8">
-            {/* Render Skeletons */}
             {[...Array(6)].map((_, index) => (
               <div
                 key={index}
@@ -119,7 +124,8 @@ const CarDataFetcher = () => {
               cars.map((item) => (
                 <div
                   key={item.id}
-                  className="p-4 bg-white border rounded-lg shadow-sm"
+                  className="p-4 bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
+                  onClick={() => handleCardClick(item.id)}
                 >
                   <img
                     src={item.fotoMobil}
