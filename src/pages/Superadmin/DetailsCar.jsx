@@ -33,7 +33,7 @@ const DetailsCar = () => {
                     </button>
                     <button
                         onClick={handleToUpdate}
-                        className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-700"
                     >
                         Edit
                     </button>
