@@ -68,16 +68,6 @@ const CarDetail = () => {
                   currency: "IDR",
                 }).format(carDetails.car.harga)}
               </p>
-
-              <div className="flex items-center justify-between mt-6 md:justify-start">
-                <Button
-                  title="Take Action"
-                  className="p-2 text-white transition-colors duration-300 border rounded-full hover:bg-blue-400"
-                  onClick={() => alert("Action triggered!")}
-                >
-                  Take Action
-                </Button>
-              </div>
             </div>
           </div>
         </main>
