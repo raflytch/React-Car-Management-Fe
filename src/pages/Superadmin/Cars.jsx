@@ -130,7 +130,7 @@ const CarsList = () => {
       <button
         onClick={(e) => {
           e.stopPropagation();
-          handleDelete(car.id);
+          handleDelete({carId: car.id, carName: car.name, noPlat: car.noPlat});
         }}
         className="absolute top-2 right-2 p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
         aria-label="Delete car"
