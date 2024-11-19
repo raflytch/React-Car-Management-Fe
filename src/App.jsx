@@ -12,6 +12,7 @@ import UpdateUser from "./pages/Users/UpdateUser";
 import UserList from "./pages/Superadmin/Users";
 import CarDataFetcher from "./components/Fragments/CarDataFetcher";
 import CarsList from "./pages/Superadmin/Cars";
+import DetailsCar from "./pages/Superadmin/DetailsCar";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="createCar" element={<CreateCar />} />
+            <Route path="cars/:id" element={<DetailsCar />} />
             <Route path="update-car/:id" element={<UpdateCar />} />
             <Route path="update-user/:id" element={<UpdateUserAdmin />} />
             <Route path="users" element={<UserList />} />
