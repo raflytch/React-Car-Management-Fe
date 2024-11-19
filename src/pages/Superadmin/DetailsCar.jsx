@@ -27,7 +27,7 @@ const DetailsCar = () => {
                     <button
                         onClick={handlePrevious}
                         className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                        disabled={parseInt(id) <= 1} // Disable if ID is 1 or less
+                        disabled={parseInt(id) <= 1}
                     >
                         Previous
                     </button>
