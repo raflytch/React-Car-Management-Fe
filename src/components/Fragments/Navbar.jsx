@@ -131,7 +131,6 @@ const Navbar = () => {
           </Link>
         </nav>
 
-        {/* Mobile Logout Button */}
         {isAuthenticated && (
           <div className="p-4">
             <Button color="red" onAction={logout} width="full">

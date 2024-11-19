@@ -12,7 +12,7 @@ const useCreateCar = () => {
     harga: "",
     fotoMobil: null,
   });
-  const [imagePreview, setImagePreview] = useState(null); // State untuk preview gambar
+  const [imagePreview, setImagePreview] = useState(null); 
   const [loading, setLoading] = useState(false);
 
   const handleCreate = (e) => {
@@ -23,7 +23,7 @@ const useCreateCar = () => {
         ...prev,
         [name]: file,
       }));
-      setImagePreview(URL.createObjectURL(file)); // Set URL preview dari file yang dipilih
+      setImagePreview(URL.createObjectURL(file)); 
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -86,7 +86,7 @@ const useCreateCar = () => {
 
   return {
     formData,
-    imagePreview, // Return imagePreview ke komponen
+    imagePreview, 
     handleCreate,
     handleSubmit,
     loading,
