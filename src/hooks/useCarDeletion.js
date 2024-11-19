@@ -4,11 +4,11 @@ import { deleteCar } from "../services/cars.service";
 
 const useCarDeletion = (onSuccessDelete) => {
   const handleDelete = useCallback(
-    async (carId) => {
+    async ({ carId, carName, noPlat }) => {
       try {
         const result = await Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
+          title: `Delete ${carName}?`,
+          text: `Are you sure you want to delete the car with license plate ${noPlat}? This action can not be undone!`,
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
