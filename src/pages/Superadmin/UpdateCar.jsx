@@ -9,13 +9,18 @@ const UpdateCar = () => {
   const {
     notFound,
     imagePreview,
-    formData,
+    register,
+    handleSubmit,
+    errors,
+    onSubmit,
     handleImageUpdate,
-    handleInputChange,
-    handleUpdate,
     loading,
     updateLoading,
     imageLoading,
+    validateYear,
+    validatePrice,
+    currentYear,
+    startYear,
   } = useUpdateCar();
 
   if (notFound) {
@@ -79,8 +84,7 @@ const UpdateCar = () => {
 
               <div className="w-full">
                 <form
-                  onSubmit={handleUpdate}
-                  encType="multipart/form-data"
+                  onSubmit={handleSubmit(onSubmit)}
                   className="space-y-4"
                 >
                   <div>
@@ -91,14 +95,17 @@ const UpdateCar = () => {
                       Car Name
                     </label>
                     <input
-                      className="w-full rounded-lg border border-gray-200 p-2.5 sm:p-3 text-sm"
+                      className={`w-full rounded-lg border ${
+                        errors.name ? 'border-red-500' : 'border-gray-200'
+                      } p-2.5 sm:p-3 text-sm`}
                       placeholder="Car Name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
+                      {...register("name", { required: "Car name is required" })}
                       type="text"
                       id="name"
                     />
+                    {errors.name && (
+                      <p className="mt-1 text-red-500 text-xs">{errors.name.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -106,17 +113,23 @@ const UpdateCar = () => {
                       className="block mb-1 sm:mb-2 text-sm sm:text-base"
                       htmlFor="year"
                     >
-                      Year
+                      Year ({startYear} - {currentYear})
                     </label>
                     <input
-                      className="w-full rounded-lg border border-gray-200 p-2.5 sm:p-3 text-sm"
-                      placeholder="Year"
-                      name="year"
-                      value={formData.year}
-                      onChange={handleInputChange}
+                      className={`w-full rounded-lg border ${
+                        errors.year ? 'border-red-500' : 'border-gray-200'
+                      } p-2.5 sm:p-3 text-sm`}
+                      placeholder={`Enter year (${startYear}-${currentYear})`}
+                      {...register("year", { 
+                        required: "Year is required",
+                        validate: validateYear
+                      })}
                       type="text"
                       id="year"
                     />
+                    {errors.year && (
+                      <p className="mt-1 text-red-500 text-xs">{errors.year.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -127,14 +140,23 @@ const UpdateCar = () => {
                       License Plate
                     </label>
                     <input
-                      className="w-full rounded-lg border border-gray-200 p-2.5 sm:p-3 text-sm"
+                      className={`w-full rounded-lg border ${
+                        errors.licensePlate ? 'border-red-500' : 'border-gray-200'
+                      } p-2.5 sm:p-3 text-sm`}
                       placeholder="License Plate"
-                      name="licensePlate"
-                      value={formData.licensePlate}
-                      onChange={handleInputChange}
+                      {...register("licensePlate", { 
+                        required: "License plate is required",
+                        minLength: {
+                          value: 4,
+                          message: "License plate must be at least 4 characters"
+                        }
+                      })}
                       type="text"
                       id="licensePlate"
                     />
+                    {errors.licensePlate && (
+                      <p className="mt-1 text-red-500 text-xs">{errors.licensePlate.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -145,14 +167,20 @@ const UpdateCar = () => {
                       Price
                     </label>
                     <input
-                      className="w-full rounded-lg border border-gray-200 p-2.5 sm:p-3 text-sm"
+                      className={`w-full rounded-lg border ${
+                        errors.price ? 'border-red-500' : 'border-gray-200'
+                      } p-2.5 sm:p-3 text-sm`}
                       placeholder="Price"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleInputChange}
+                      {...register("price", { 
+                        required: "Price is required",
+                        validate: validatePrice
+                      })}
                       type="text"
                       id="price"
                     />
+                    {errors.price && (
+                      <p className="mt-1 text-red-500 text-xs">{errors.price.message}</p>
+                    )}
                   </div>
 
                   <div className="pt-4">

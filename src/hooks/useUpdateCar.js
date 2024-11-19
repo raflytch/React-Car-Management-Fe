@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import {
   fetchDetailsCars as detailsCarService,
@@ -15,12 +16,24 @@ export const useUpdateCar = () => {
   const [updateLoading, setUpdateLoading] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    year: "",
-    licensePlate: "",
-    price: "",
-    image: null,
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const currentYear = new Date().getFullYear();
+  const startYear = 1900;
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      year: "",
+      licensePlate: "",
+      price: "",
+    },
+    mode: "onBlur",
   });
 
   const loadCarsDetail = async () => {
@@ -39,12 +52,11 @@ export const useUpdateCar = () => {
           setCarDetails(data);
           setTimeout(() => {
             setImagePreview(data.car.fotoMobil);
-            setFormData({
+            reset({
               name: data.car.name || "",
               year: data.car.tahun || "",
               licensePlate: data.car.noPlat || "",
               price: data.car.harga || "",
-              image: null,
             });
             setImageLoading(false);
           }, 500);
@@ -74,26 +86,29 @@ export const useUpdateCar = () => {
       setTimeout(() => {
         const previewUrl = URL.createObjectURL(fileImage);
         setImagePreview(previewUrl);
-        setFormData((prev) => ({
-          ...prev,
-          image: fileImage,
-        }));
+        setSelectedImage(fileImage);
         setImageLoading(false);
       }, 500);
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const validateYear = (value) => {
+    const yearNum = parseInt(value);
+    if (isNaN(yearNum)) return "Please enter a valid year";
+    if (yearNum > currentYear)
+      return `Year cannot be greater than ${currentYear}`;
+    if (yearNum < startYear) return `Year cannot be less than ${startYear}`;
+    return true;
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+  const validatePrice = (value) => {
+    const priceNum = parseInt(value);
+    if (isNaN(priceNum)) return "Please enter a valid price";
+    if (priceNum <= 0) return "Price must be greater than 0";
+    return true;
+  };
 
+  const onSubmit = async (formData) => {
     const result = await Swal.fire({
       title: "Confirm Update",
       text: "Are you sure you want to update this car?",
@@ -125,8 +140,8 @@ export const useUpdateCar = () => {
     submitFormData.append("noPlat", formData.licensePlate);
     submitFormData.append("harga", formData.price);
 
-    if (formData.image instanceof File) {
-      submitFormData.append("fotoMobil", formData.image);
+    if (selectedImage instanceof File) {
+      submitFormData.append("fotoMobil", selectedImage);
     }
 
     try {
@@ -183,12 +198,17 @@ export const useUpdateCar = () => {
   return {
     notFound,
     imagePreview,
-    formData,
+    register,
+    handleSubmit,
+    errors,
+    onSubmit,
     handleImageUpdate,
-    handleInputChange,
-    handleUpdate,
     loading,
     updateLoading,
     imageLoading,
+    validateYear,
+    validatePrice,
+    currentYear,
+    startYear,
   };
 };
