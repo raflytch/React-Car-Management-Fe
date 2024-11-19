@@ -37,7 +37,7 @@ const HomePage = () => {
       <section className="bg-gray-100 py-16">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
-            Developer <span className="text-blue-600">Kami</span>
+            Our<span className="text-blue-600"> Developer</span>
           </h1>
           <DataMarquee />
         </div>

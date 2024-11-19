@@ -1,4 +1,6 @@
 import React from 'react';
+import girl from '../../assets/images/girl.jpg';
+import boy from '../../assets/images/boy.jpg';
 
 const Marquee = () => {
   const profiles = [
@@ -13,7 +15,7 @@ const Marquee = () => {
   ];
 
   return (
-    <div className="py-8p-4">
+    <div className="py-8 p-4">
       <marquee behavior="scroll" direction="left" scrollamount="10">
         <div className="flex space-x-8">
           {profiles.map((profile, index) => (
@@ -23,9 +25,7 @@ const Marquee = () => {
             >
               <div className="relative">
                 <img
-                  src={`src/assets/images/${
-                    profile.name === "Nita Fitrotul" ? "girl.jpg" : "boy.jpg"
-                  }`}
+                  src={profile.name === "Nita Fitrotul" ? girl : boy}
                   alt="Profile"
                   className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-white shadow-inner"
                 />
@@ -34,7 +34,9 @@ const Marquee = () => {
                 </div>
               </div>
               <div className="text-center">
-                <h3 className="font-bold text-white text-lg mb-1">{profile.name}</h3>
+                <h3 className="font-bold text-white text-lg mb-1">
+                  {profile.name}
+                </h3>
                 <p className="text-sm text-white/90 font-medium px-3 py-1 rounded-full bg-black/50">
                   {profile.role}
                 </p>
