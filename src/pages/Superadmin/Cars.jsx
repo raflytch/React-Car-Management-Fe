@@ -7,7 +7,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-// Skeleton component for loading state
 const CarCardSkeleton = () => (
   <div className="flex flex-col items-center p-5 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
     <div className="w-24 h-24 mb-4">

@@ -4,7 +4,7 @@ import Loading from "../Elements/Loading/Loading";
 import useFetchedDetailCar from "../../hooks/useFetchedDetailsCar";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+
 
 const CarDetail = () => {
   const { carDetails, loading, error } = useFetchedDetailCar();
@@ -26,16 +26,6 @@ const CarDetail = () => {
   return (
     <section className="bg-white rounded-lg">
       <div className="max-w-6xl px-6 py-10 mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-500 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <FaArrowLeft className="text-lg" />
-            Back
-          </button>
-        </div>
-
         <p className="text-xl font-medium text-black">Car Details</p>
         <h1 className="mt-2 text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-red-500">
           {carDetails.car.name}

@@ -4,7 +4,6 @@ const Footer = () => {
   return (
     <footer className="bg-gray-50 py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Newsletter Section */}
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
             Stay Updated!
@@ -27,7 +26,6 @@ const Footer = () => {
           </form>
         </div>
 
-        {/* Links Section */}
         <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <h3 className="text-lg font-medium text-gray-900">Services</h3>
@@ -117,7 +115,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Section */}
         <div className="mt-12 border-t border-gray-200 pt-6 text-center">
           <p className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()} Company Name. All rights reserved.

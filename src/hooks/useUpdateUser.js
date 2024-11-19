@@ -14,7 +14,7 @@ const useUpdateUser = () => {
                 title: "Update User Successful!",
                 text: "You have successfully updated user data.",
             });
-            return response; // Return response if needed
+            return response; 
         } 
         catch (error) {
             Swal.fire({
@@ -22,7 +22,7 @@ const useUpdateUser = () => {
                 title: "Update User Failed",
                 text: error?.response?.data?.message || error?.message || "An unknown error occurred.",
             });
-            throw error; // Re-throw error for further handling
+            throw error; 
         } 
         finally {
             setLoading(false);

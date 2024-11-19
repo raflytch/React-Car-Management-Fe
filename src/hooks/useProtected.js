@@ -48,7 +48,6 @@ const useProtected = (allowedRoles = ["admin", "superadmin"]) => {
     };
 
     validateToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, location.pathname]);
 
   return { isAuthenticated };
