@@ -5,11 +5,11 @@ const FAQ = () => {
     <section className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-gray-100">
       <div className="col-span-1">
         <h2 className="text-3xl font-extrabold text-blue-600">
-          Frequently Asked Questions
+          Pertanyaan yang Sering Diajukan
         </h2>
         <p className="mt-4 text-gray-700">
-          Temukan jawaban atas pertanyaan umum tentang layanan kami di bawah
-          ini.
+          Temukan jawaban atas pertanyaan umum seputar layanan penyewaan mobil
+          kami di bawah ini.
         </p>
       </div>
 
@@ -20,7 +20,7 @@ const FAQ = () => {
         >
           <summary className="flex cursor-pointer items-center justify-between gap-1.5">
             <h2 className="text-lg font-medium text-gray-900">
-              Lorem ipsum dolor sit amet consectetur adipisicing?
+              Apa saja persyaratan untuk menyewa mobil?
             </h2>
 
             <span className="shrink-0 rounded-full bg-white p-1.5 text-gray-900 sm:p-3">
@@ -40,17 +40,17 @@ const FAQ = () => {
           </summary>
 
           <p className="mt-4 leading-relaxed text-gray-700">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab hic
-            veritatis molestias culpa in, recusandae laboriosam neque aliquid
-            libero nesciunt voluptate dicta quo officiis explicabo consequuntur
-            distinctio corporis earum similique!
+            Untuk menyewa mobil, Anda harus berusia minimal 21 tahun, memiliki
+            SIM yang valid, dan kartu kredit untuk pembayaran deposit. Pastikan
+            juga Anda memenuhi persyaratan umur sesuai dengan jenis mobil yang
+            ingin disewa.
           </p>
         </details>
 
         <details className="group rounded-xl bg-gray-50 p-6 [&_summary::-webkit-details-marker]:hidden">
           <summary className="flex cursor-pointer items-center justify-between gap-1.5">
             <h2 className="text-lg font-medium text-gray-900">
-              Lorem ipsum dolor sit amet consectetur adipisicing?
+              Apakah saya bisa mengubah atau membatalkan pemesanan?
             </h2>
 
             <span className="shrink-0 rounded-full bg-white p-1.5 text-gray-900 sm:p-3">
@@ -70,10 +70,9 @@ const FAQ = () => {
           </summary>
 
           <p className="mt-4 leading-relaxed text-gray-700">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab hic
-            veritatis molestias culpa in, recusandae laboriosam neque aliquid
-            libero nesciunt voluptate dicta quo officiis explicabo consequuntur
-            distinctio corporis earum similique!
+            Ya, Anda dapat mengubah atau membatalkan pemesanan hingga 24 jam
+            sebelum waktu sewa yang dijadwalkan tanpa biaya pembatalan. Setelah
+            itu, biaya pembatalan akan diterapkan sesuai dengan kebijakan kami.
           </p>
         </details>
       </div>
