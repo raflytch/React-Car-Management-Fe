@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthRole } from "../../contexts/AuthRoleContext";
-import editIcon from '../../assets/edit.svg';
+import editIcon from "../../assets/edit.svg";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -14,8 +14,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full bg-slate-200 text-gray-800 z-40 transition-transform ${isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 w-64`}
+      className={`fixed top-0 left-0 h-full bg-slate-200 text-gray-800 z-40 transition-transform ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0 w-64`}
     >
       <div className="flex flex-col h-full">
         <div className="p-4 border-b border-gray-300 flex items-center justify-center">
@@ -51,10 +52,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             />
             <div className="flex space-between gap-5">
               <p className="text-gray-800 font-semibold">
-                {user?.firstName} {user.lastName}
+                {user?.firstName} {user?.lastName}
               </p>
               <Link to={`/dashboard/update-user/${user?.id}`}>
-                <img src={editIcon} alt="" srcset="" />
+                <img src={editIcon} alt="Edit Profile" srcSet={editIcon} />
               </Link>
             </div>
           </div>

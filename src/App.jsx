@@ -25,7 +25,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="createCar" element={<CreateCar />} />
+            <Route path="create-car" element={<CreateCar />} />
             <Route path="update-car/:id" element={<UpdateCar />} />
             <Route path="update-user/:id" element={<UpdateUserAdmin />} />
             <Route path="users" element={<UserList />} />

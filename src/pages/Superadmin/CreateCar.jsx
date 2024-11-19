@@ -7,7 +7,7 @@ const CreateCar = () => {
     useCreateCar();
 
   return (
-    <section className="relative flex flex-wrap lg:h-screen lg:items-center">
+    <section className="flex flex-wrap lg:h-screen lg:items-center">
       <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-lg text-center">
           <h1 className="text-2xl font-bold sm:text-3xl">Create a New Car</h1>
@@ -28,7 +28,7 @@ const CreateCar = () => {
               type="text"
               name="name"
               id="name"
-              className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+              className="w-full rounded-lg border-gray-300 p-4 text-sm shadow-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter car name"
               value={formData.name}
               onChange={handleCreate}
@@ -43,7 +43,7 @@ const CreateCar = () => {
               type="number"
               name="tahun"
               id="tahun"
-              className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+              className="w-full rounded-lg border-gray-300 p-4 text-sm shadow-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter car year"
               value={formData.tahun}
               onChange={handleCreate}
@@ -58,7 +58,7 @@ const CreateCar = () => {
               type="text"
               name="noPlat"
               id="noPlat"
-              className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+              className="w-full rounded-lg border-gray-300 p-4 text-sm shadow-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter license plate"
               value={formData.noPlat}
               onChange={handleCreate}
@@ -73,7 +73,7 @@ const CreateCar = () => {
               type="number"
               name="harga"
               id="harga"
-              className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+              className="w-full rounded-lg border-gray-300 p-4 text-sm shadow-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter price"
               value={formData.harga}
               onChange={handleCreate}
@@ -119,7 +119,7 @@ const CreateCar = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
+              className="inline-block rounded-lg bg-slate-600 w-full lg:w-auto px-5 py-3 text-sm font-medium text-white"
               disabled={loading}
             >
               {loading ? "Creating..." : "Add Car"}
@@ -127,12 +127,14 @@ const CreateCar = () => {
           </div>
         </form>
       </div>
-      <div className="relative h-64 w-full lg:h-full lg:w-1/2">
-        <img
-          alt="Add a new car"
-          src={carImage}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+      <div className="hidden lg:block lg:relative lg:h-full lg:w-1/2">
+        <div className="absolute inset-0 h-full w-full object-cover ">
+          <img
+            alt="Add a new car"
+            src={carImage}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </div>
       </div>
     </section>
   );
