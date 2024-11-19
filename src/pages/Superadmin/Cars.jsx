@@ -60,14 +60,11 @@ const CarsList = () => {
     harga: "",
   });
 
-  // Initialize delete functionality with refresh callback
   const { handleDelete } = useCarDeletion(() => {
     getCars(pagination.currentPage, filters);
   });
 
-  useEffect(() => {
-    // Initial fetch or any filter changes
-  }, [filters]);
+  useEffect(() => {}, [filters]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination.totalPages) {
@@ -131,7 +128,6 @@ const CarsList = () => {
       key={car.id}
       className="relative flex flex-col items-center p-5 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all duration-300 shadow-sm hover:shadow"
     >
-      {/* Delete Button */}
       <button
         onClick={(e) => {
           e.stopPropagation();
@@ -143,7 +139,6 @@ const CarsList = () => {
         <FaTrash size={16} />
       </button>
 
-      {/* Car Details - Clickable Area */}
       <div
         onClick={() => handleCardClick(car.id)}
         className="w-full cursor-pointer"
@@ -158,7 +153,7 @@ const CarsList = () => {
         />
         <div className="text-center space-y-2">
           <p className="text-xl font-semibold text-gray-800">{car.name}</p>
-          <p className="text-sm text-gray-600 truncate max-w-[200px]">
+          <p className="text-sm text-gray-600 truncate max-w-[200px] mx-auto">
             {car.noPlat}
           </p>
           <p className="text-sm text-gray-500">

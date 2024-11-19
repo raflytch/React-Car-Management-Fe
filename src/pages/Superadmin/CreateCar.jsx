@@ -1,10 +1,47 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 import carImage from "../../assets/car01.webp";
 import useCreateCar from "../../hooks/useCreateCar";
+import Loading from "../../components/Elements/Loading/Loading";
 
 const CreateCar = () => {
-  const { formData, imagePreview, handleCreate, handleSubmit, loading } =
-    useCreateCar();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm({
+    defaultValues: {
+      name: "",
+      tahun: "",
+      noPlat: "",
+      harga: "",
+    },
+  });
+
+  const { imagePreview, handleCreate, onSubmit, loading } =
+    useCreateCar(setValue);
+  const hargaValue = watch("harga");
+
+  const handlePriceChange = (e) => {
+    let value = e.target.value;
+    value = value.replace(/[^0-9]/g, "");
+
+    if (value) {
+      const number = parseInt(value, 10);
+      const formatted = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(number);
+
+      setValue("harga", formatted);
+    } else {
+      setValue("harga", "");
+    }
+  };
 
   return (
     <section className="flex flex-wrap lg:h-screen lg:items-center">
@@ -16,70 +53,86 @@ const CreateCar = () => {
           </p>
         </div>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="mx-auto mb-0 mt-8 max-w-md space-y-6"
           encType="multipart/form-data"
         >
           <div>
-            <label htmlFor="name" className="sr-only">
-              Car Name
-            </label>
             <input
               type="text"
-              name="name"
-              id="name"
+              {...register("name", {
+                required: "Car name is required",
+                minLength: {
+                  value: 3,
+                  message: "Name must be at least 3 characters",
+                },
+              })}
               className="w-full rounded-lg border-gray-300 p-4 text-sm shadow-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter car name"
-              value={formData.name}
-              onChange={handleCreate}
-              required
             />
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+            )}
           </div>
+
           <div>
-            <label htmlFor="tahun" className="sr-only">
-              Year
-            </label>
             <input
               type="number"
-              name="tahun"
-              id="tahun"
+              {...register("tahun", {
+                required: "Year is required",
+                min: {
+                  value: 1900,
+                  message: "Year must be after 1900",
+                },
+                max: {
+                  value: new Date().getFullYear(),
+                  message: "Year cannot be in the future",
+                },
+              })}
               className="w-full rounded-lg border-gray-300 p-4 text-sm shadow-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter car year"
-              value={formData.tahun}
-              onChange={handleCreate}
-              required
             />
+            {errors.tahun && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.tahun.message}
+              </p>
+            )}
           </div>
+
           <div>
-            <label htmlFor="noPlat" className="sr-only">
-              License Plate
-            </label>
             <input
               type="text"
-              name="noPlat"
-              id="noPlat"
+              {...register("noPlat")}
               className="w-full rounded-lg border-gray-300 p-4 text-sm shadow-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter license plate"
-              value={formData.noPlat}
-              onChange={handleCreate}
-              required
             />
           </div>
+
           <div>
-            <label htmlFor="harga" className="sr-only">
-              Price
-            </label>
             <input
-              type="number"
-              name="harga"
-              id="harga"
+              type="text"
+              {...register("harga", {
+                required: "Price is required",
+                validate: (value) => {
+                  const number = parseInt(value.replace(/[^0-9]/g, ""));
+                  if (isNaN(number) || number <= 0) {
+                    return "Please enter a valid price";
+                  }
+                  return true;
+                },
+              })}
               className="w-full rounded-lg border-gray-300 p-4 text-sm shadow-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Enter price"
-              value={formData.harga}
-              onChange={handleCreate}
-              required
+              value={hargaValue}
+              onChange={handlePriceChange}
             />
+            {errors.harga && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.harga.message}
+              </p>
+            )}
           </div>
+
           <div className="w-full">
             {imagePreview && (
               <div className="mb-4">
@@ -116,19 +169,20 @@ const CreateCar = () => {
               </div>
             </label>
           </div>
+
           <div className="flex justify-end">
             <button
               type="submit"
               className="inline-block rounded-lg bg-slate-600 w-full lg:w-auto px-5 py-3 text-sm font-medium text-white"
               disabled={loading}
             >
-              {loading ? "Creating..." : "Add Car"}
+              {loading ? <Loading /> : "Add Car"}
             </button>
           </div>
         </form>
       </div>
       <div className="hidden lg:block lg:relative lg:h-full lg:w-1/2">
-        <div className="absolute inset-0 h-full w-full object-cover ">
+        <div className="absolute inset-0 h-full w-full object-cover rounded-lg overflow-hidden">
           <img
             alt="Add a new car"
             src={carImage}
