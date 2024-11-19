@@ -51,7 +51,10 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 <span className="hidden sm:block text-gray-800 font-semibold text-sm">
-                  Hello, {user.firstName}
+                  Hello,
+                  <span className="hover:underline">
+                    <Link to={`/update-user/${user.id}`}>{user.firstName}</Link>
+                  </span>
                 </span>
                 <Button color="red" onAction={logout} width="auto">
                   Logout
@@ -91,11 +94,10 @@ const Navbar = () => {
       </div>
 
       <div
-        className={`absolute top-16 left-0 w-full bg-white shadow-lg md:hidden transition-transform duration-300 ${
-          isMenuOpen
+        className={`absolute top-16 left-0 w-full bg-white shadow-lg md:hidden transition-transform duration-300 ${isMenuOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-10 pointer-events-none"
-        }`}
+          }`}
       >
         <nav className="flex flex-col items-start space-y-2 p-4">
           <Link
