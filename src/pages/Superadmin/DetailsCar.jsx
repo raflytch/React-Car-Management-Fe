@@ -11,15 +11,14 @@ const DetailsCar = () => {
     const {id} = useParams()
     const navigate = useNavigate()
 
-    const handleToUpdate = (id) => navigate(`/update-car/${id}`)
+    const handleToUpdate = () => navigate(`/dashboard/update-car/${id}`)
 
     return (
         <div>
             <CarDetail />
             <div>
                 <Button onAction={handleToUpdate}>Edit</Button>
-
-            </div>
+            </div>  
         </div>
     )
 }

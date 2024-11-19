@@ -29,33 +29,6 @@ const fetchCars = async (page = 1, limit = 6, filters = {}) => {
   }
 };
 
-// const fetchDetailsCars = async (id) => {
-//   try {
-//     const response = await axiosInstance.get(`/cars/${id}`);
-//     const carsData = response.data.data.car;
-//     // Check if the response is successful
-//     if (response.status === 200 && carsData) {
-//       return {
-//         status: "Success",
-//         data: carsData, // Return the actual car details
-//       };
-//     } else {
-//       // Handle unexpected API structure or failure
-//       return {
-//         status: "Error",
-//         message: carsData?.message || "Failed to fetch car details",
-//       };
-//     }
-//   } catch (err) {
-//     // Catch and handle any errors
-//     const errorMessage = err.response?.data?.message || err.message || "An unexpected error occurred";
-//     return {
-//       status: "Error",
-//       message: errorMessage,
-//     };
-//   }
-// };
-
 const fetchDetailsCars = async (id, callback) => {
   try {
     const response = await axiosInstance.get(`/cars/${id}`);
