@@ -1,77 +1,55 @@
-import { useState, useEffect } from "react";
-import axiosInstance from "../../api/axiosInstance";
+import React, { useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import Button from "../Elements/Buttons/Button";
-import Loading from "../Elements/Loading/Loading";
 import Navbar from "./Navbar";
-import useProtectedAll from "../../hooks/useProtectedAll";
 import Footer from "./Footer";
 import useFetchedCars from "../../hooks/useFetchedCars";
 
 const CarDataFetcher = () => {
-  useProtectedAll(["member"]);
-  const [carName, setCarName] = useState("");
-  const [carPrice, setCarPrice] = useState("");
-  const [carData, setCarData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const { cars, pagination, getCars } = useFetchedCars();
+  const { cars, pagination, getCars, loading, updateFilters, filters } =
+    useFetchedCars();
+  const [carName, setCarName] = useState(filters.name);
+  const [carPrice, setCarPrice] = useState(filters.harga);
 
-  const fetchCars = async (name, price) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const rawPrice = price ? price.replace(/[^\d]/g, '') : '';
-      const params = {
-        name: name || '', 
-        harga: rawPrice || '',
-      };
-      const response = await axiosInstance.get(`/cars/filter`, {
-        params
-      });
-      if (response.data.isSuccess) {
-        setCarData(response.data.data.cars);
-      } else {
-        setError(response.data.message || "Failed to fetch cars");
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "An unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCars();
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetchCars(carName, carPrice);
+    await updateFilters({
+      name: carName,
+      harga: carPrice ? carPrice.replace(/[^\d]/g, "") : "",
+    });
   };
 
   const handlePriceChange = (e) => {
-    const rawValue = e.target.value.replace(/\D/g, ''); 
+    const rawValue = e.target.value.replace(/\D/g, "");
     const formattedValue = rawValue
       ? new Intl.NumberFormat("id-ID", {
           style: "decimal",
           currency: "IDR",
         }).format(rawValue)
       : "";
-
     setCarPrice(formattedValue);
   };
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination.totalPages) {
-      getCars(newPage);
+      getCars(newPage, filters);
     }
   };
 
   return (
-    <div className="p-6">
+    <div>
       <div className="mb-6">
         <Navbar />
       </div>
+      <section className="space-y-16 px-8">
+        <div className="relative text-center py-20  from-blue-500 to-red-500 bg-gradient-to-br  text-white rounded-lg shadow-lg overflow-hidden ">
+          <h1 className="text-4xl font-bold tracking-tight">Hallo</h1>
+          <p className="mt-2 text-lg font-medium text-gray-100">
+            Welcome to the car search application
+          </p>
+          <div className="mt-6 h-1 w-24 mx-auto bg-white rounded-full"></div>
+        </div>
       <form
         className="flex flex-col md:flex-row items-end justify-center gap-6"
         onSubmit={handleSubmit}
@@ -116,16 +94,29 @@ const CarDataFetcher = () => {
           Search
         </Button>
       </form>
+      </section>
 
       <div className="py-6">
         {loading ? (
-          <Loading />
-        ) : error ? (
-          <div className="text-red-500 text-center">{error}</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-8">
+            {/* Render Skeletons */}
+            {[...Array(6)].map((_, index) => (
+              <div
+                key={index}
+                className="p-4 bg-white border rounded-lg shadow-sm"
+              >
+                <Skeleton height={192} className="mb-4" />
+                <Skeleton width="80%" height={24} className="mb-2" />
+                <Skeleton width="60%" height={20} className="mb-1" />
+                <Skeleton width="50%" height={20} className="mb-1" />
+                <Skeleton width="40%" height={20} />
+              </div>
+            ))}
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {carData.length > 0 ? (
-              carData.map((item) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-8">
+            {cars.length > 0 ? (
+              cars.map((item) => (
                 <div
                   key={item.id}
                   className="p-4 bg-white border rounded-lg shadow-sm"
@@ -141,11 +132,12 @@ const CarDataFetcher = () => {
                   />
                   <h3 className="text-lg font-semibold">{item.name}</h3>
                   <p className="text-gray-500">
-                    Price: Rp {new Intl.NumberFormat({ 
-                      style: 'currency', 
-                      currency: 'IDR',
+                    Price: Rp{" "}
+                    {new Intl.NumberFormat({
+                      style: "currency",
+                      currency: "IDR",
                       minimumFractionDigits: 0,
-                      maximumFractionDigits: 0
+                      maximumFractionDigits: 0,
                     }).format(item.harga)}
                   </p>
                   <p className="text-gray-400">Plate: {item.noPlat}</p>
@@ -168,7 +160,7 @@ const CarDataFetcher = () => {
             disabled={pagination.currentPage === 1}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Previous
+            Prev
           </button>
 
           <div className="flex items-center gap-1">
@@ -197,12 +189,16 @@ const CarDataFetcher = () => {
         </div>
       )}
 
-      <div className="text-center text-sm text-gray-500 mt-2">
-        Page {pagination.currentPage} of {pagination.totalPages} (
-        {pagination.totalData} total cars)
+      <div className="text-center mt-4">
+        <p className="text-sm text-gray-500">
+          Showing {pagination.totalData} car{pagination.totalData !== 1 && "s"}{" "}
+          in {pagination.totalPages} page{pagination.totalPages !== 1 && "s"}.
+        </p>
       </div>
-      
-      <Footer />
+
+      <div className="mt-12">
+        <Footer />
+      </div>
     </div>
   );
 };

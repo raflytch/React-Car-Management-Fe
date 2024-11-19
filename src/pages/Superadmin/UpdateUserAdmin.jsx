@@ -85,7 +85,7 @@ const UpdateUserAdmin = () => {
                     <div>
                         <label className="" htmlFor="firstName">First Name</label><br />
                         <input
-                            className="w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
+                            className="w-full xl:w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
                             placeholder="First Name"
                             type="text"
                             id="firstName"
@@ -98,7 +98,7 @@ const UpdateUserAdmin = () => {
                     <div>
                         <label className="" htmlFor="lastName">Last Name</label><br />
                         <input
-                            className="w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
+                            className="w-full xl:w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
                             placeholder="Last Name"
                             type="text"
                             id="lastName"
@@ -111,7 +111,7 @@ const UpdateUserAdmin = () => {
                     <div>
                         <label className="" htmlFor="email">Email</label><br />
                         <input
-                            className="w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
+                            className="w-full xl:w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
                             placeholder="Email Address"
                             type="email"
                             id="email"
@@ -124,7 +124,7 @@ const UpdateUserAdmin = () => {
                     <div>
                         <label className="" htmlFor="phone">Phone</label><br />
                         <input
-                            className="w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
+                            className="w-full xl:w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
                             placeholder="Phone Number"
                             type="tel"
                             id="phone"
@@ -137,7 +137,7 @@ const UpdateUserAdmin = () => {
                     <div>
                         <label className="" htmlFor="fotoProfil">Profile Photo</label><br />
                         <input
-                            className="w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
+                            className="w-full xl:w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
                             type="file"
                             id="fotoProfil"
                             name="fotoProfil"
@@ -149,7 +149,7 @@ const UpdateUserAdmin = () => {
                     <div>
                         <label className="" htmlFor="confirmPassword">Old Password</label><br />
                         <input
-                            className="w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
+                            className="w-full xl:w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
                             placeholder="Old Password"
                             type="password"
                             id="confirmPassword"
@@ -162,7 +162,7 @@ const UpdateUserAdmin = () => {
                     <div>
                         <label className="" htmlFor="password">New Password</label><br />
                         <input
-                            className="w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
+                            className="w-full xl:w-1/2 rounded-lg border-2 border-gray-200 p-3 text-sm"
                             placeholder="New Password"
                             type="password"
                             id="password"

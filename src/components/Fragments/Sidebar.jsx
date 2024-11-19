@@ -51,7 +51,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             />
             <div className="flex space-between gap-5">
               <p className="text-gray-800 font-semibold">
-                {user?.firstName}
+                {user?.firstName} {user.lastName}
               </p>
               <Link to={`/dashboard/update-user/${user?.id}`}>
                 <img src={editIcon} alt="" srcset="" />

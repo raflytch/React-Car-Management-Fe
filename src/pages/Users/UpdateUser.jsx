@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import useProtectedAll from "../../hooks/useProtectedAll";
 import useDetailUser from "../../hooks/useDetailUser";
 import useUpdateUser from "../../hooks/useUpdateUser";
@@ -76,12 +76,15 @@ const UpdateUser = () => {
         }
     };
 
-    return (
-        <div className="rounded-lg mx-96 my-20 bg-gray-100 p-8 shadow-lg lg:col-span-3 lg:p-12">
+    return (    
+        <div className="rounded-lg md:bg-gray-100 p-8 md:shadow-lg md:mx-32 md:my-16 lg:col-span-3 xl:p-12 xl:mx-96 xl:my-16">
+            <Link to="/"><h4 className="mb-6 underline text-red-600">Back to home</h4></Link>
             {loading ? (
                 <p>Loading...</p>
             ) : (
+                
                 <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
+                    
                     <div>
                         <label className="" htmlFor="firstName">First Name</label><br />
                         <input
