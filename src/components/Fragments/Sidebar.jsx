@@ -40,6 +40,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 Cars
               </Link>
             </li>
+            <li>
+              <Link
+                to="/dashboard/create-car"
+                className="block py-2 px-4 rounded-lg hover:bg-gray-200"
+              >
+                Create Car
+              </Link>
+            </li>
           </ul>
         </nav>
 

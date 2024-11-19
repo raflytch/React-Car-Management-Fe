@@ -71,7 +71,6 @@ const useFetchedCars = () => {
 
   useEffect(() => {
     getCars(1, filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { cars, loading, pagination, getCars, updateFilters, filters };

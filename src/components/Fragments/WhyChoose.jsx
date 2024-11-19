@@ -6,7 +6,7 @@ const WhyChoose = () => {
       <section className="bg-gradient-to-b from-blue-50 via-white to-gray-50 py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
+            <h1 className="text-4xl font-extrabold text-gray-800 mb-4" id="why">
               Why Choose <span className="text-blue-600">Piplined?</span>
             </h1>
             <p className="text-gray-600 text-lg">

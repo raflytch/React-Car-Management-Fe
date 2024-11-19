@@ -22,19 +22,19 @@ const Navbar = () => {
 
           <nav className="hidden md:flex items-center gap-6 text-sm">
             <Link
-              to="/history"
+              to="/"
               className="text-gray-500 transition hover:text-gray-700"
             >
-              History
+              Why Us
             </Link>
             <Link
-              to="/services"
+              to="/"
               className="text-gray-500 transition hover:text-gray-700"
             >
               Services
             </Link>
             <Link
-              to="/projects"
+              to="/"
               className="text-gray-500 transition hover:text-gray-700"
             >
               Projects
@@ -94,28 +94,29 @@ const Navbar = () => {
       </div>
 
       <div
-        className={`absolute top-16 left-0 w-full bg-white shadow-lg md:hidden transition-transform duration-300 ${isMenuOpen
+        className={`absolute top-16 left-0 w-full bg-white shadow-lg md:hidden transition-transform duration-300 ${
+          isMenuOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-10 pointer-events-none"
-          }`}
+        }`}
       >
         <nav className="flex flex-col items-start space-y-2 p-4">
           <Link
-            to="/history"
+            to="/"
             className="block text-gray-700 hover:text-gray-900 w-full"
             onClick={() => setIsMenuOpen(false)}
           >
-            History
+            Why Us
           </Link>
           <Link
-            to="/services"
+            to="/"
             className="block text-gray-700 hover:text-gray-900 w-full"
             onClick={() => setIsMenuOpen(false)}
           >
             Services
           </Link>
           <Link
-            to="/projects"
+            to="/"
             className="block text-gray-700 hover:text-gray-900 w-full"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -130,7 +131,6 @@ const Navbar = () => {
           </Link>
         </nav>
 
-        {/* Mobile Logout Button */}
         {isAuthenticated && (
           <div className="p-4">
             <Button color="red" onAction={logout} width="full">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   fetchDetailsCars as detailsCarService,
   updateCar as updateCarService,
@@ -7,8 +8,12 @@ import {
 
 export const useUpdateCar = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [notFound, setNotFound] = useState(false);
   const [carDetails, setCarDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -18,17 +23,21 @@ export const useUpdateCar = () => {
     image: null,
   });
 
-  useEffect(() => {
-    const loadCarsDetail = async () => {
-      if (!id) {
-        setNotFound(true);
-        return;
-      }
+  const loadCarsDetail = async () => {
+    setImageLoading(true);
+    setImagePreview(null);
 
-      try {
-        await detailsCarService(id, (status, data) => {
-          if (status === "Success" && data?.car) {
-            setCarDetails(data);
+    if (!id) {
+      setNotFound(true);
+      setImageLoading(false);
+      return;
+    }
+
+    try {
+      await detailsCarService(id, (status, data) => {
+        if (status === "Success" && data?.car) {
+          setCarDetails(data);
+          setTimeout(() => {
             setImagePreview(data.car.fotoMobil);
             setFormData({
               name: data.car.name || "",
@@ -37,28 +46,40 @@ export const useUpdateCar = () => {
               price: data.car.harga || "",
               image: null,
             });
-          } else {
-            setNotFound(true);
-          }
-        });
-      } catch (error) {
-        console.error("Error loading car details:", error);
-        setNotFound(true);
-      }
-    };
+            setImageLoading(false);
+          }, 500);
+        } else {
+          setNotFound(true);
+          setImageLoading(false);
+        }
+      });
+    } catch (error) {
+      setNotFound(true);
+      setImageLoading(false);
+    }
+  };
 
-    loadCarsDetail();
+  useEffect(() => {
+    setLoading(true);
+    loadCarsDetail().finally(() => {
+      setLoading(false);
+    });
   }, [id]);
 
   const handleImageUpdate = (e) => {
     const fileImage = e.target.files[0];
     if (fileImage) {
-      const previewUrl = URL.createObjectURL(fileImage);
-      setImagePreview(previewUrl);
-      setFormData((prev) => ({
-        ...prev,
-        image: fileImage,
-      }));
+      setImageLoading(true);
+      setImagePreview(null);
+      setTimeout(() => {
+        const previewUrl = URL.createObjectURL(fileImage);
+        setImagePreview(previewUrl);
+        setFormData((prev) => ({
+          ...prev,
+          image: fileImage,
+        }));
+        setImageLoading(false);
+      }, 500);
     }
   };
 
@@ -73,8 +94,28 @@ export const useUpdateCar = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
+    const result = await Swal.fire({
+      title: "Confirm Update",
+      text: "Are you sure you want to update this car?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Update Car",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+      focusCancel: true,
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    setUpdateLoading(true);
+    setImageLoading(true);
+    setImagePreview(null);
+
     if (!id) {
-      console.error("No car ID provided");
+      setUpdateLoading(false);
+      setImageLoading(false);
       return;
     }
 
@@ -89,28 +130,53 @@ export const useUpdateCar = () => {
     }
 
     try {
-      await updateCarService(id, submitFormData, (status, response) => {
+      await updateCarService(id, submitFormData, async (status, response) => {
         if (status === "Success") {
-          console.log("Car updated successfully:", response);
-          if (response.car?.fotoMobil) {
-            setImagePreview(response.car.fotoMobil);
-          }
-          setFormData((prev) => ({
-            ...prev,
-            image: null,
-          }));
+          await Swal.fire({
+            icon: "success",
+            title: "Car Updated Successfully!",
+            text: "The car details have been updated.",
+          });
+
+          setTimeout(async () => {
+            await loadCarsDetail();
+            navigate(`/dashboard/update-car/${id}`);
+          }, 500);
         } else {
-          console.error("Error updating car:", response);
-          if (carDetails?.car?.fotoMobil) {
-            setImagePreview(carDetails.car.fotoMobil);
-          }
+          await Swal.fire({
+            icon: "error",
+            title: "Update Failed",
+            text:
+              response?.message ||
+              "Failed to update car details. Please try again.",
+          });
+
+          setImagePreview(null);
+          setTimeout(() => {
+            if (carDetails?.car?.fotoMobil) {
+              setImagePreview(carDetails.car.fotoMobil);
+            }
+            setImageLoading(false);
+          }, 500);
         }
       });
     } catch (error) {
-      console.error("Error in update request:", error);
-      if (carDetails?.car?.fotoMobil) {
-        setImagePreview(carDetails.car.fotoMobil);
-      }
+      await Swal.fire({
+        icon: "error",
+        title: "Unexpected Error",
+        text: "An unexpected error occurred. Please try again.",
+      });
+
+      setImagePreview(null);
+      setTimeout(() => {
+        if (carDetails?.car?.fotoMobil) {
+          setImagePreview(carDetails.car.fotoMobil);
+        }
+        setImageLoading(false);
+      }, 500);
+    } finally {
+      setUpdateLoading(false);
+      setLoading(false);
     }
   };
 
@@ -121,140 +187,8 @@ export const useUpdateCar = () => {
     handleImageUpdate,
     handleInputChange,
     handleUpdate,
+    loading,
+    updateLoading,
+    imageLoading,
   };
 };
-
-// import { useState, useEffect } from "react";
-// import { useParams } from "react-router-dom";
-// import {
-//   fetchDetailsCars as detailsCarService,
-//   updateCar as updateCarService,
-// } from "../services/cars.service";
-
-// export const useUpdateCar = () => {
-//   const { id } = useParams();
-//   const [notFound, setNotFound] = useState(false);
-//   const [carDetails, setCarDetails] = useState(null);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [imagePreview, setImagePreview] = useState(null);
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     year: "",
-//     licensePlate: "",
-//     price: "",
-//     image: null,
-//   });
-
-//   useEffect(() => {
-//     const loadCarsDetail = async () => {
-//       if (!id) {
-//         setNotFound(true);
-//         return;
-//       }
-
-//       setIsLoading(true);
-//       try {
-//         await detailsCarService(id, (status, data) => {
-//           if (status === "Success" && data?.car) {
-//             setCarDetails(data);
-//             setImagePreview(data.car.fotoMobil);
-//             setFormData({
-//               name: data.car.name || "",
-//               year: data.car.tahun || "",
-//               licensePlate: data.car.noPlat || "",
-//               price: data.car.harga || "",
-//               image: null,
-//             });
-//           } else {
-//             setNotFound(true);
-//           }
-//         });
-//       } catch (error) {
-//         console.error("Error loading car details:", error);
-//         setNotFound(true);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-
-//     loadCarsDetail();
-//   }, [id]);
-
-//   const handleImageUpdate = (e) => {
-//     const fileImage = e.target.files[0];
-//     if (fileImage) {
-//       const previewUrl = URL.createObjectURL(fileImage);
-//       setImagePreview(previewUrl);
-//       setFormData((prev) => ({
-//         ...prev,
-//         image: fileImage,
-//       }));
-//     }
-//   };
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleUpdate = async (e) => {
-//     e.preventDefault();
-
-//     if (!id) {
-//       console.error("No car ID provided");
-//       return;
-//     }
-
-//     setIsLoading(true);
-
-//     const submitFormData = new FormData();
-//     submitFormData.append("name", formData.name);
-//     submitFormData.append("tahun", formData.year);
-//     submitFormData.append("noPlat", formData.licensePlate);
-//     submitFormData.append("harga", formData.price);
-
-//     if (formData.image instanceof File) {
-//       submitFormData.append("fotoMobil", formData.image);
-//     }
-
-//     try {
-//       await updateCarService(id, submitFormData, (status, response) => {
-//         if (status === "Success") {
-//           console.log("Car updated successfully:", response);
-//           if (response.car?.fotoMobil) {
-//             setImagePreview(response.car.fotoMobil);
-//           }
-//           setFormData((prev) => ({
-//             ...prev,
-//             image: null,
-//           }));
-//         } else {
-//           console.error("Error updating car:", response);
-//           if (carDetails?.car?.fotoMobil) {
-//             setImagePreview(carDetails.car.fotoMobil);
-//           }
-//         }
-//       });
-//     } catch (error) {
-//       console.error("Error in update request:", error);
-//       if (carDetails?.car?.fotoMobil) {
-//         setImagePreview(carDetails.car.fotoMobil);
-//       }
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   return {
-//     notFound,
-//     isLoading,
-//     imagePreview,
-//     formData,
-//     handleImageUpdate,
-//     handleInputChange,
-//     handleUpdate,
-//   };
-// };

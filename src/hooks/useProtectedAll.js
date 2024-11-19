@@ -27,7 +27,6 @@ const useProtectedAll = (allowedRoles) => {
         }
 
         const userRole = decodedToken.role?.toLowerCase();
-        // console.log(userRole)
 
         if (!allowedRoles.includes(userRole)) {
             if (userRole === 'member') {
@@ -53,7 +52,6 @@ const useProtectedAll = (allowedRoles) => {
     };
 
     validateToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, location.pathname]);
 
   return { isAuthenticated };

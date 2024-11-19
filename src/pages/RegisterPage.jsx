@@ -7,7 +7,6 @@ import CarRegisterBanner from "../assets/images/car-banner-login.jpg";
 const RegisterPage = () => {
   return (
     <div className="flex flex-col lg:flex-row w-full h-full">
-      {/* Form Section */}
       <div className="flex flex-1 items-center justify-center py-12 px-6 sm:px-12 bg-white">
         <div className="w-full max-w-md space-y-8">
           <h1 className="text-center text-3xl font-bold text-red-600 sm:text-4xl">
@@ -28,7 +27,6 @@ const RegisterPage = () => {
           </p>
         </div>
       </div>
-      {/* Banner Section */}
       <DynamicBanner
         imageSrc={CarRegisterBanner}
         title="Join the Journey"
