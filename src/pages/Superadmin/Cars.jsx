@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import useFetchedCars from "../../hooks/useFetchedCars";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useNavigate } from "react-router-dom";
 
 const CarCardSkeleton = () => (
   <div className="flex flex-col items-center p-5 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
@@ -48,6 +49,7 @@ const CarCardSkeleton = () => (
 );
 
 const CarsList = () => {
+  const navigate = useNavigate();
   const { cars, pagination, getCars, loading } = useFetchedCars();
   const [filters] = useState({
     name: "",
@@ -60,6 +62,10 @@ const CarsList = () => {
     if (newPage >= 1 && newPage <= pagination.totalPages) {
       getCars(newPage, filters);
     }
+  };
+
+  const handleCardClick = (carId) => {
+    navigate(`/dashboard/cars/${carId}`);
   };
 
   return (
@@ -94,7 +100,8 @@ const CarsList = () => {
                 cars.map((car) => (
                   <li
                     key={car.id}
-                    className="flex flex-col items-center p-5 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all duration-300 shadow-sm hover:shadow"
+                    onClick={() => handleCardClick(car.id)}
+                    className="flex flex-col items-center p-5 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all duration-300 shadow-sm hover:shadow cursor-pointer"
                   >
                     <img
                       src={car.fotoMobil}
