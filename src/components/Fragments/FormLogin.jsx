@@ -1,82 +1,75 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 import InputForm from "../Elements/Input/InputForm";
 import Button from "../Elements/Buttons/Button";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import { Login } from "../../services/auth.service";
+import useLogin from "../../hooks/useLogin";
+import Loading from "../Elements/Loading/Loading";
 
 const FormLogin = () => {
-  const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { login, loading } = useLogin();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setFocus,
+  } = useForm();
 
   const inputRef = useRef(null);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    setFocus("email"); // focus email input field on form load
+  }, [setFocus]);
 
-    if (!email || !password) {
-      setErrorMessage("Email and password are required");
-      return;
-    }
-
-    const data = {
-      email: email.trim(),
-      password: password,
-    };
-
-    setLoading(true);
-    setErrorMessage("");
-
-    Login(data, (status, response) => {
-      setLoading(false);
-
-      if (status === "Success") {
-        console.log("Login successful:", response);
-        Cookies.set("token", response);
-        navigate("/");
-      } else {
-        navigate("/login");
-        setErrorMessage(response);
-      }
-    });
+  const handleLogin = async (data) => {
+    const { email, password } = data;
+    login(email, password);
   };
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
   return (
-    <>
-      <div>
-        <form onSubmit={handleLogin}>
+    <div className="flex justify-center items-center px-4 py-6">
+      <div className="w-full sm:w-full bg-white p-4 rounded-lg">
+        {loading && <Loading />}
+        <form onSubmit={handleSubmit(handleLogin)}>
           <InputForm
             label="Email"
             type="email"
             id="email"
             name="email"
-            placeholder="wahyuimut@gmail.com"
-            ref={inputRef}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@gmail.com"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email address",
+              },
+            })}
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mb-4">{errors.email.message}</p>
+          )}
+
           <InputForm
             label="Password"
             type="password"
             id="password"
             name="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password", {
+              required: "Password is required",
+            })}
           />
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-          <Button type="submit">Login</Button>
+          {errors.password && (
+            <p className="text-red-500 text-sm mb-4">
+              {errors.password.message}
+            </p>
+          )}
+
+          <Button type="submit" color="red" width="full">
+            Login
+          </Button>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 
